@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsideLAUTECH - LAUTECH Campus Marketplace</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
+                <span class="brand-text">InsideLAUTECH</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#categories">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonials">Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-signup" href="signup.html">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12 text-center hero-content">
+                    <h1 class="display-3 fw-bold mb-4 fade-in-up">Welcome to InsideLAUTECH</h1>
+                    <p class="lead mb-4 fade-in-up delay-1">Your trusted campus marketplace for all student needs</p>
+                    <div class="fade-in-up delay-2 hero-buttons">
+                        <a href="signup.html" class="btn btn-primary btn-lg me-2 mb-2">Get Started</a>
+                        <a href="#categories" class="btn btn-outline-light btn-lg mb-2">Browse Categories</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop by Category Section -->
+    <section id="categories" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold fade-in">Shop by Category</h2>
+                <p class="text-light fade-in delay-1">Everything you need for your academic journey and campus life</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="category-card text-center card-hover">
+                        <div class="category-icon bg-light-blue">
+                            <i class="bi bi-book fs-1"></i>
+                        </div>
+                        <h5 class="mt-3">Textbooks</h5>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="category-card text-center card-hover">
+                        <div class="category-icon bg-light-green">
+                            <i class="bi bi-laptop fs-1"></i>
+                        </div>
+                        <h5 class="mt-3">Electronics</h5>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="category-card text-center card-hover">
+                        <div class="category-icon bg-light-yellow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                                class="bi bi-fork-knife" viewBox="0 0 16 16">
+                                <path
+                                    d="M13 .5c0-.276-.226-.506-.498-.465-1.703.257-2.94 2.012-3 8.462a.5.5 0 0 0 .498.5c.56.01 1 .13 1 1.003v5.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5zM4.25 0a.25.25 0 0 1 .25.25v5.122a.128.128 0 0 0 .256.006l.233-5.14A.25.25 0 0 1 5.24 0h.522a.25.25 0 0 1 .25.238l.233 5.14a.128.128 0 0 0 .256-.006V.25A.25.25 0 0 1 6.75 0h.29a.5.5 0 0 1 .498.458l.423 5.07a1.69 1.69 0 0 1-1.059 1.711l-.053.022a.92.92 0 0 0-.58.884L6.47 15a.971.971 0 1 1-1.942 0l.202-6.855a.92.92 0 0 0-.58-.884l-.053-.022a1.69 1.69 0 0 1-1.059-1.712L3.462.458A.5.5 0 0 1 3.96 0z" />
+                            </svg>
+                        </div>
+                        <h5 class="mt-3">Food</h5>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="category-card text-center card-hover">
+                        <div class="category-icon bg-light-purple">
+                            <i class="bi bi-bag fs-1"></i>
+                        </div>
+                        <h5 class="mt-3">Clothing</h5>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="category-card text-center card-hover">
+                        <div class="category-icon bg-light-red">
+                            <i class="bi bi-house-door fs-1"></i>
+                        </div>
+                        <h5 class="mt-3">Room Essentials</h5>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="category-card text-center card-hover">
+                        <div class="category-icon bg-light-blue">
+                            <i class="bi bi-mortarboard fs-1"></i>
+                        </div>
+                        <h5 class="mt-3">Stationery</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="products" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Featured Products</h2>
+                <p class="text-light">Popular items among LAUTECH students</p>
+            </div>
+            <div class="row g-4">
+                <!-- Product 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100 card-hover">
+                        <img src="https://imgs.search.brave.com/1uolTsfGVNz56f_VyZ7LXpo_xweRPEzhWxUFpCVrj64/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdG9y/ZS5kb3ZlcnB1Ymxp/Y2F0aW9ucy5jb20v/Y2RuL3Nob3AvcHJv/ZHVjdHMvOTc4MDQ4/NjQ2ODU1Nl80MDB4/LmpwZz92PTE3MTAy/MDcwMjc"
+                            class="card-img-top" alt="Engineering Mathematics">
+                        <div class="card-body">
+                            <h5 class="card-title">Engineering Mathematics</h5>
+                            <p class="card-text text-dark">Essential textbook for engineering students</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price">₦20,500</span>
+                                <button class="btn btn-primary btn-sm">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100 card-hover">
+                        <img src="https://imgs.search.brave.com/I3mPmNVUunLlwInHTT0vaBRsR-QVn4uy86Ms4RIObyA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2ZlL2Y3/L2IzL2ZlZjdiM2Ni/YWViNTlhZmM5NzRh/YjA0ZGQyMDc0MWU2/LmpwZw"
+                            class="card-img-top" alt="Student Laptop">
+                        <div class="card-body">
+                            <h5 class="card-title">Student Laptop</h5>
+                            <p class="card-text text-dark">Perfect for research and assignments</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price">₦350,000</span>
+                                <button class="btn btn-primary btn-sm">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100 card-hover">
+                        <img src="https://imgs.search.brave.com/jl3t-5UbVtzOH8elr_Rmyj5s50EUJys-SLPzH0vxzco/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9raWtp/Zm9vZGllcy5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMjQv/MTEvRVQ1QjcwMzct/NC0xMDI0eDU3Ni5q/cGc"
+                            class="card-img-top" alt="Jollof Rice Combo">
+                        <div class="card-body">
+                            <h5 class="card-title">Jollof Rice Combo</h5>
+                            <p class="card-text text-dark">Fresh meal delivered to your hostel</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price">₦1,200</span>
+                                <button class="btn btn-primary btn-sm order-btn">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100 card-hover">
+                        <img src="https://imgs.search.brave.com/ZbY1kwKsVMsYe8cDReE9HVrhfu9FHi04mQE5Hk9vVOU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzE2LzYzLzA0Lzk5/LzM2MF9GXzE2NjMw/NDk5MDBfT2RRRjFu/RkF4cUZVTWQ1aFZz/NTlqRVdhdGp0M0I1/MmouanBn"
+                            class="card-img-top" alt="LAUTECH Hoodie">
+                        <div class="card-body">
+                            <h5 class="card-title">LAUTECH Hoodie</h5>
+                            <p class="card-text text-dark">Official university merchandise</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price">₦4,500</span>
+                                <button class="btn btn-primary btn-sm">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campus Services Section -->
+    <section id="services" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Campus Services</h2>
+                <p class="text-light">Making student life easier with on-demand services</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="service-card text-center card-hover">
+                        <div class="service-icon bg-light-blue">
+                            <i class="bi bi-truck fs-1"></i>
+                        </div>
+                        <h4 class="mt-4">Fast Delivery</h4>
+                        <p class="text-light">Get your orders delivered to your hostel within 30 minutes</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card text-center card-hover">
+                        <div class="service-icon bg-light-green">
+                            <i class="bi bi-basket fs-1"></i>
+                        </div>
+                        <h4 class="mt-4">Laundry Service</h4>
+                        <p class="text-light">Professional laundry pickup and delivery service</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card text-center card-hover">
+                        <div class="service-icon bg-light-yellow">
+                            <i class="bi bi-person-video2 fs-1"></i>
+                        </div>
+                        <h4 class="mt-4">Tutoring</h4>
+                        <p class="text-light">Connect with top students for academic assistance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">What Students Say</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card card-hover">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="./images/flourish.jpg" alt="Flourish Amao" class="testimonial-avatar me-3">
+                            <div>
+                                <h5 class="mb-0">Flourish Amao</h5>
+                                <small class="text-dark">Engineering Student</small>
+                            </div>
+                        </div>
+                        <p class="text-dark"> InsideLAUTECH saved me so much time! I can order my textbooks and have
+                            them
+                            delivered to my hostel. Amazing service!"</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card card-hover">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="./images/ricardo.jpg" alt="Richard Olayinka" class="testimonial-avatar me-3">
+                            <div>
+                                <h5 class="mb-0">Richard Olayinka</h5>
+                                <small class="text-dark">Medical Student</small>
+                            </div>
+                        </div>
+                        <p class="text-dark">"The food delivery is a lifesaver during exam periods. Fresh meals
+                            delivered right to my room!"</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card card-hover">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="./images/spencer.jpg" alt="Mahfuz Asafa" class="testimonial-avatar me-3">
+                            <div>
+                                <h5 class="mb-0">Mahfuz Asafa</h5>
+                                <small class="text-dark">Computer Science Student</small>
+                            </div>
+                        </div>
+                        <p class="text-dark">"Great platform! I found all my tech needs here at student-friendly
+                            prices. Highly recommended!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section py-5">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold text-white mb-4">Ready to Start Shopping?</h2>
+            <p class="lead text-white mb-4">Join thousands of LAUTECH students who trust us for their daily needs</p>
+            <div>
+                <a href="signup.html" class="btn btn-warning btn-lg me-3">Create Account</a>
+                <a href="#" class="btn btn-outline-light btn-lg">Download App</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
+                        <h4 class="text-white mb-0">InsideLAUTECH</h4>
+                    </div>
+                    <p class="text-light">Your trusted campus marketplace for all student needs.</p>
+                    <div class="social-icons">
+                        <a href="https://web.facebook.com/lautechofficial/?_rdc=1&_rdr#" class="text-white me-3"><i
+                                class="bi bi-facebook fs-4"></i></a>
+                        <a href="https://x.com/lautechofficial?lang=en" class="text-white me-3"><i
+                                class="bi bi-twitter fs-4"></i></a>
+                        <a href="https://www.instagram.com/lautechofficial/" class="text-white"><i
+                                class="bi bi-instagram fs-4"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="text-white mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">How It Works</a></li>
+                        <li><a href="#" class="text-light">Delivery Info</a></li>
+                        <li><a href="#" class="text-light">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="text-white mb-3">Categories</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">Textbooks</a></li>
+                        <li><a href="#" class="text-light">Electronics</a></li>
+                        <li><a href="#" class="text-light">Food Delivery</a></li>
+                        <li><a href="#" class="text-light">Services</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-12 mb-4">
+                    <h5 class="text-white mb-3">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li class="text-light mb-2"><i class="bi bi-telephone me-2"></i> +234 703 475 5802</li>
+                        <li class="text-light mb-2"><i class="bi bi-envelope me-2"></i> insidelautech2025@yahoo.com</li>
+                        <li class="text-light"><i class="bi bi-geo-alt me-2"></i> LAUTECH Main Campus, Ogbomoso</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <div class="text-center">
+                <p class="text-light mb-0">© 2025 InsideLAUTECH. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
