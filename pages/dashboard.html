@@ -93,8 +93,8 @@
                                     <input type="text" class="form-control" id="profileMatric" readonly>
                                 </div>
                             </div>
-                            <div class="alert alert-info">
-                                <i class="bi bi-info-circle"></i> Member since ${new Date().toLocaleDateString()}
+                            <div class="alert alert-info" id="memberSince">
+                                <i class="bi bi-info-circle"></i> Member since
                             </div>
                         </div>
                     </div>
@@ -175,6 +175,11 @@
         document.getElementById('profileEmail').value = user.email
         document.getElementById('profilePhone').value = user.phone || 'Not provided'
         document.getElementById('profileMatric').value = user.matric || 'Not provided'
+        
+        // set member since date
+        document.getElementById('memberSince').innerHTML = `
+            <i class="bi bi-info-circle"></i> Member since ${new Date().toLocaleDateString()}
+        `
 
         // load favorites (random products for demo)
         const favorites = products.slice(0, 6)
