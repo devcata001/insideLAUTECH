@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <img src="lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
+                <img src="assets/lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
                 <span class="brand-text">InsideLAUTECH</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -35,19 +35,25 @@
                         <a class="nav-link" href="#categories">Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#products">Products</a>
+                        <a class="nav-link" href="pages/products.html">Products</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#services">Services</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#tutorials">Tutorials</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#testimonials">Reviews</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="login.html">Login</a>
+                        <a class="nav-link" href="pages/cart.html"><i class="bi bi-cart3"></i> Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn-signup" href="signup.html">Sign Up</a>
+                        <a class="nav-link" href="pages/login.html" id="loginLink">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-signup" href="pages/signup.html" id="signupLink">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -248,6 +254,80 @@
         </div>
     </section>
 
+    <script>
+        // add functionality to product buttons on homepage
+        document.addEventListener('DOMContentLoaded', () => {
+            const addToCartButtons = document.querySelectorAll('#products .btn-primary')
+            addToCartButtons.forEach((btn, index) => {
+                if (!btn.classList.contains('order-btn')) {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault()
+                        window.location.href = 'pages/products.html'
+                    })
+                } else {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault()
+                        alert('Order feature coming soon!')
+                    })
+                }
+            })
+        })
+    </script>
+
+    <!-- Tutorial Section -->
+    <section id="tutorials" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Campus Tutorials</h2>
+                <p class="text-light">Connect with experienced tutors for academic excellence</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card service-card card-hover h-100">
+                        <div class="card-body text-center">
+                            <div class="service-icon bg-light-blue mb-3 mx-auto">
+                                <i class="bi bi-person-video3 fs-1"></i>
+                            </div>
+                            <h4>Gen David Tutorial</h4>
+                            <p class="text-muted">Mathematics & Engineering courses</p>
+                            <p class="text-dark"><i class="bi bi-geo-alt"></i> Tech Block, Room 205</p>
+                            <p class="text-success fw-bold">₦2,000/hour</p>
+                            <button class="btn btn-primary" onclick="contactTutor('Gen David')">Contact Tutor</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card card-hover h-100">
+                        <div class="card-body text-center">
+                            <div class="service-icon bg-light-green mb-3 mx-auto">
+                                <i class="bi bi-book fs-1"></i>
+                            </div>
+                            <h4>Zenith Tutorial</h4>
+                            <p class="text-muted">Sciences & Medical courses</p>
+                            <p class="text-dark"><i class="bi bi-geo-alt"></i> Faculty of Science</p>
+                            <p class="text-success fw-bold">₦2,500/hour</p>
+                            <button class="btn btn-primary" onclick="contactTutor('Zenith')">Contact Tutor</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card card-hover h-100">
+                        <div class="card-body text-center">
+                            <div class="service-icon bg-light-purple mb-3 mx-auto">
+                                <i class="bi bi-mortarboard fs-1"></i>
+                            </div>
+                            <h4>Don Mike Tutorial</h4>
+                            <p class="text-muted">Business & Social Sciences</p>
+                            <p class="text-dark"><i class="bi bi-geo-alt"></i> Management Building</p>
+                            <p class="text-success fw-bold">₦1,800/hour</p>
+                            <button class="btn btn-primary" onclick="contactTutor('Don Mike')">Contact Tutor</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-5 bg-light">
         <div class="container">
@@ -258,7 +338,7 @@
                 <div class="col-md-4">
                     <div class="testimonial-card card-hover">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="./images/flourish.jpg" alt="Flourish Amao" class="testimonial-avatar me-3">
+                            <img src="assets/images/flourish.jpg" alt="Flourish Amao" class="testimonial-avatar me-3">
                             <div>
                                 <h5 class="mb-0">Flourish Amao</h5>
                                 <small class="text-dark">Engineering Student</small>
@@ -272,7 +352,7 @@
                 <div class="col-md-4">
                     <div class="testimonial-card card-hover">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="./images/ricardo.jpg" alt="Richard Olayinka" class="testimonial-avatar me-3">
+                            <img src="assets/images/ricardo.jpg" alt="Richard Olayinka" class="testimonial-avatar me-3">
                             <div>
                                 <h5 class="mb-0">Richard Olayinka</h5>
                                 <small class="text-dark">Medical Student</small>
@@ -285,7 +365,7 @@
                 <div class="col-md-4">
                     <div class="testimonial-card card-hover">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="./images/spencer.jpg" alt="Mahfuz Asafa" class="testimonial-avatar me-3">
+                            <img src="assets/images/spencer.jpg" alt="Mahfuz Asafa" class="testimonial-avatar me-3">
                             <div>
                                 <h5 class="mb-0">Mahfuz Asafa</h5>
                                 <small class="text-dark">Computer Science Student</small>
@@ -317,7 +397,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-4">
                     <div class="d-flex align-items-center mb-3">
-                        <img src="lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
+                        <img src="assets/lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
                         <h4 class="text-white mb-0">InsideLAUTECH</h4>
                     </div>
                     <p class="text-light">Your trusted campus marketplace for all student needs.</p>
@@ -364,8 +444,56 @@
         </div>
     </footer>
 
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+    <script>
+        // make categories clickable
+        document.addEventListener('DOMContentLoaded', () => {
+            const categories = document.querySelectorAll('.category-card')
+            categories.forEach(card => {
+                card.style.cursor = 'pointer'
+                card.addEventListener('click', () => {
+                    const categoryName = card.querySelector('h5').textContent.toLowerCase()
+                    window.location.href = `pages/products.html?category=${categoryName}`
+                })
+            })
+
+            // make service cards clickable  
+            const serviceCards = document.querySelectorAll('.service-card')
+            serviceCards.forEach(card => {
+                card.style.cursor = 'pointer'
+                const title = card.querySelector('h4').textContent
+                card.addEventListener('click', () => {
+                    if (title.includes('Delivery')) {
+                        window.location.href = 'pages/products.html?category=food'
+                    } else if (title.includes('Laundry')) {
+                        alert('Laundry Service: Call 0800-LAUTECH-WASH for pickup service!')
+                    } else if (title.includes('Tutoring')) {
+                        const tutorialsSection = document.querySelector('#tutorials')
+                        if (tutorialsSection) {
+                            tutorialsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }
+                    }
+                })
+            })
+        })
+
+        // tutor contact function
+        const contactTutor = (tutorName) => {
+            const user = checkSession ? checkSession() : null
+            if (!user) {
+                alert('Please login to contact tutors')
+                window.location.href = 'pages/login.html'
+                return
+            }
+            alert(`Contacting ${tutorName}...\n\nYour request has been sent! The tutor will reach out to you via your registered email: ${user.email}`)
+        }
+    </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
 </body>
 
 </html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - InsideLAUTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .product-card {
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .filter-section {
+            background: #2c3e50;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .price-badge {
+            background: #27ae60;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../assets/lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
+                InsideLAUTECH
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            <i class="bi bi-cart3"></i> Cart <span id="cartCount" class="badge bg-danger">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html" id="dashboardLink">Dashboard</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="filter-section">
+                    <h5 class="text-white mb-3">Filters</h5>
+                    <div class="mb-3">
+                        <label class="text-white">Search</label>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search products...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-white">Category</label>
+                        <select id="categoryFilter" class="form-select">
+                            <option value="all">All Categories</option>
+                            <option value="textbooks">Textbooks</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="stationery">Stationery</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-white">Price Range</label>
+                        <select id="priceFilter" class="form-select">
+                            <option value="all">All Prices</option>
+                            <option value="0-5000">Under ₦5,000</option>
+                            <option value="5000-15000">₦5,000 - ₦15,000</option>
+                            <option value="15000-50000">₦15,000 - ₦50,000</option>
+                            <option value="50000-999999">Above ₦50,000</option>
+                        </select>
+                    </div>
+                    <button onclick="applyFilters()" class="btn btn-primary w-100">Apply Filters</button>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <h2 class="text-white mb-4">All Products</h2>
+                <div class="row g-4" id="productsGrid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        let filteredProducts = [...products]
+
+        const renderProducts = (productsToRender) => {
+            const grid = document.getElementById('productsGrid')
+            if (productsToRender.length === 0) {
+                grid.innerHTML = '<div class="col-12"><p class="text-white text-center">No products found</p></div>'
+                return
+            }
+
+            grid.innerHTML = productsToRender.map(p => `
+                <div class="col-md-4">
+                    <div class="card product-card bg-dark text-white h-100" onclick="viewProduct(${p.id})">
+                        <img src="${p.image}" class="card-img-top" alt="${p.name}" style="height: 200px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/300x200?text=${p.name}'">
+                        <div class="card-body">
+                            <h5 class="card-title">${p.name}</h5>
+                            <p class="card-text text-muted small">${p.description}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price-badge">₦${p.price.toLocaleString()}</span>
+                                <span class="text-warning">
+                                    ${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5 - Math.floor(p.rating))}
+                                </span>
+                            </div>
+                            <button onclick="event.stopPropagation(); addToCart(products.find(pr => pr.id === ${p.id}))" class="btn btn-primary w-100 mt-3">
+                                <i class="bi bi-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('')
+        }
+
+        const applyFilters = () => {
+            const search = searchInput.value.toLowerCase()
+            const category = categoryFilter.value
+            const priceRange = priceFilter.value
+
+            filteredProducts = products.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(search) || p.description.toLowerCase().includes(search)
+                const matchesCategory = category === 'all' || p.category === category
+
+                let matchesPrice = true
+                if (priceRange !== 'all') {
+                    const [min, max] = priceRange.split('-').map(Number)
+                    matchesPrice = p.price >= min && p.price <= max
+                }
+
+                return matchesSearch && matchesCategory && matchesPrice
+            })
+
+            renderProducts(filteredProducts)
+        }
+
+        const viewProduct = (id) => {
+            window.location.href = `product-detail.html?id=${id}`
+        }
+
+        searchInput.addEventListener('input', applyFilters)
+
+        // check for category from URL
+        const urlParams = new URLSearchParams(window.location.search)
+        const categoryParam = urlParams.get('category')
+        if (categoryParam) {
+            categoryFilter.value = categoryParam
+            applyFilters()
+        } else {
+            renderProducts(products)
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - InsideLAUTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .product-detail-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .detail-section {
+            padding: 30px;
+        }
+
+        .related-card {
+            background: white;
+            transition: transform 0.3s;
+        }
+
+        .related-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../assets/lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
+                InsideLAUTECH
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">All Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            <i class="bi bi-cart3"></i> Cart <span id="cartCount" class="badge bg-danger">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="product-detail-card mb-5">
+            <div class="row g-0" id="productDetail">
+                <div class="col-12 text-center p-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Loading product details...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h4 class="text-white mb-4"><i class="bi bi-grid"></i> Related Products</h4>
+            <div class="row g-4" id="relatedProducts">
+                <!-- Related products will load here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search)
+        const productId = parseInt(urlParams.get('id'))
+
+        console.log('Product ID:', productId)
+        console.log('Products array:', products)
+
+        if (!productId || isNaN(productId)) {
+            document.getElementById('productDetail').innerHTML = `
+                <div class="col-12 text-center p-5">
+                    <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
+                    <h3>No product selected</h3>
+                    <p class="text-muted">Please select a product from the products page</p>
+                    <a href="products.html" class="btn btn-primary mt-3">Browse Products</a>
+                </div>
+            `
+        } else {
+            const product = products.find(p => p.id === productId)
+            console.log('Found product:', product)
+
+            if (product) {
+                document.title = `${product.name} - InsideLAUTECH`
+
+                document.getElementById('productDetail').innerHTML = `
+                    <div class="col-md-6">
+                        <img src="${product.image}" class="img-fluid w-100" alt="${product.name}" 
+                             style="height: 500px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-6 detail-section">
+                        <h2 class="mb-3">${product.name}</h2>
+                        <div class="text-warning mb-3">
+                            ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))} 
+                            <span class="text-muted">(${product.rating} rating)</span>
+                        </div>
+                        <h3 class="text-success mb-4">₦${product.price.toLocaleString()}</h3>
+                        <p class="text-muted mb-4">${product.description}</p>
+                        
+                        <div class="mb-4">
+                            <label class="fw-bold me-3">Quantity:</label>
+                            <input type="number" id="quantity" value="1" min="1" max="10" 
+                                   class="form-control d-inline-block" style="width: 100px;">
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-4">
+                            <button onclick="addProductToCart()" class="btn btn-success btn-lg">
+                                <i class="bi bi-cart-plus"></i> Add to Cart
+                            </button>
+                            <button onclick="window.location.href='products.html'" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Products
+                            </button>
+                        </div>
+                        
+                        <div class="border rounded p-3 bg-light">
+                            <h5 class="mb-3"><i class="bi bi-info-circle"></i> Product Information</h5>
+                            <p class="mb-2"><i class="bi bi-tag text-primary"></i> <strong>Category:</strong> ${product.category}</p>
+                            <p class="mb-2"><i class="bi bi-check-circle text-success"></i> <strong>Status:</strong> In Stock</p>
+                            <p class="mb-0"><i class="bi bi-truck text-info"></i> <strong>Delivery:</strong> Campus Delivery Available</p>
+                        </div>
+                    </div>
+                `
+
+                // show related products
+                const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3)
+                if (related.length > 0) {
+                    document.getElementById('relatedProducts').innerHTML = related.map(p => `
+                        <div class="col-md-4">
+                            <div class="card related-card h-100" onclick="window.location.href='product-detail.html?id=${p.id}'" style="cursor: pointer;">
+                                <img src="${p.image}" class="card-img-top" alt="${p.name}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h6 class="card-title">${p.name}</h6>
+                                    <p class="text-success fw-bold mb-2">₦${p.price.toLocaleString()}</p>
+                                    <small class="text-muted">${p.description}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')
+                } else {
+                    document.getElementById('relatedProducts').innerHTML = `
+                        <div class="col-12 text-center text-white">
+                            <p>No related products found</p>
+                        </div>
+                    `
+                }
+            } else {
+                document.getElementById('productDetail').innerHTML = `
+                    <div class="col-12 text-center p-5">
+                        <i class="bi bi-search fs-1 text-danger mb-3"></i>
+                        <h3>Product not found</h3>
+                        <p class="text-muted">The product you're looking for doesn't exist</p>
+                        <a href="products.html" class="btn btn-primary mt-3">Browse Products</a>
+                    </div>
+                `
+            }
+        }
+
+        const addProductToCart = () => {
+            const qty = parseInt(document.getElementById('quantity').value) || 1
+            const product = products.find(p => p.id === productId)
+            if (product) {
+                for (let i = 0; i < qty; i++) {
+                    addToCart(product)
+                }
+                alert(`Added ${qty} x ${product.name} to cart!`)
+            }
+        }
+    </script>
+    for (let i = 0; i < qty; i++) { addToCart(product) } } } </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

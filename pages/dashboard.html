@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - InsideLAUTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../assets/lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
+                InsideLAUTECH
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            <i class="bi bi-cart3"></i> Cart <span id="cartCount" class="badge bg-danger">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button onclick="logout()" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card bg-dark text-white">
+                    <div class="card-body text-center">
+                        <i class="bi bi-person-circle fs-1 mb-3"></i>
+                        <h5 id="userName">User</h5>
+                        <p class="text-muted small" id="userEmail">email@example.com</p>
+                        <hr>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-light active" onclick="showSection('profile')">
+                                <i class="bi bi-person"></i> Profile
+                            </button>
+                            <button class="btn btn-outline-light" onclick="showSection('orders')">
+                                <i class="bi bi-bag"></i> Orders
+                            </button>
+                            <button class="btn btn-outline-light" onclick="showSection('favorites')">
+                                <i class="bi bi-heart"></i> Favorites
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <!-- Profile Section -->
+                <div id="profileSection" class="section-content">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body">
+                            <h4 class="mb-4"><i class="bi bi-person-circle"></i> Profile Information</h4>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="profileName" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="profileEmail" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" id="profilePhone" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Matric Number</label>
+                                    <input type="text" class="form-control" id="profileMatric" readonly>
+                                </div>
+                            </div>
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> Member since ${new Date().toLocaleDateString()}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h2><i class="bi bi-bag-check"></i></h2>
+                                    <h3 id="totalOrders">0</h3>
+                                    <p>Total Orders</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h2><i class="bi bi-heart"></i></h2>
+                                    <h3 id="totalFavorites">0</h3>
+                                    <p>Favorites</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body text-center">
+                                    <h2><i class="bi bi-star"></i></h2>
+                                    <h3>4.8</h3>
+                                    <p>Your Rating</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="ordersSection" class="section-content" style="display: none;">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body">
+                            <h4 class="mb-4"><i class="bi bi-bag"></i> My Orders</h4>
+                            <div class="text-center py-5">
+                                <i class="bi bi-bag-x fs-1 text-muted"></i>
+                                <p class="text-muted mt-3">No orders yet</p>
+                                <a href="products.html" class="btn btn-primary">Start Shopping</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorites Section -->
+                <div id="favoritesSection" class="section-content" style="display: none;">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body">
+                            <h4 class="mb-4"><i class="bi bi-heart"></i> My Favorites</h4>
+                            <div class="row g-3" id="favoritesGrid">
+                                <!-- Show some random products as favorites -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // check if user is logged in
+        const user = checkSession()
+        if (!user) {
+            alert('Please login to access dashboard')
+            window.location.href = 'login.html'
+        }
+
+        // load user info
+        document.getElementById('userName').textContent = user.name
+        document.getElementById('userEmail').textContent = user.email
+        document.getElementById('profileName').value = user.name
+        document.getElementById('profileEmail').value = user.email
+        document.getElementById('profilePhone').value = user.phone || 'Not provided'
+        document.getElementById('profileMatric').value = user.matric || 'Not provided'
+
+        // load favorites (random products for demo)
+        const favorites = products.slice(0, 6)
+        document.getElementById('totalFavorites').textContent = favorites.length
+        document.getElementById('favoritesGrid').innerHTML = favorites.map(p => `
+            <div class="col-md-4">
+                <div class="card bg-secondary text-white h-100">
+                    <img src="${p.image}" class="card-img-top" alt="${p.name}" style="height: 150px; object-fit: cover;"
+                            onerror="this.src='https://via.placeholder.com/300x150?text=${p.name}'">
+                    <div class="card-body">
+                        <h6>${p.name}</h6>
+                        <p class="text-success fw-bold">₦${p.price.toLocaleString()}</p>
+                        <button onclick="addToCart(products.find(pr => pr.id === ${p.id}))" class="btn btn-sm btn-primary w-100">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('')
+
+        const showSection = (section) => {
+            document.querySelectorAll('.section-content').forEach(s => s.style.display = 'none')
+            document.querySelectorAll('.btn-outline-light').forEach(b => b.classList.remove('active'))
+
+            if (section === 'profile') {
+                document.getElementById('profileSection').style.display = 'block'
+            } else if (section === 'orders') {
+                document.getElementById('ordersSection').style.display = 'block'
+            } else if (section === 'favorites') {
+                document.getElementById('favoritesSection').style.display = 'block'
+            }
+
+            event.target.classList.add('active')
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
