@@ -1,5 +1,3 @@
-// main.js - cart logic, session management, shared functionality
-
 // cart management
 let cart = []
 if (localStorage.insidelautech_cart) {
@@ -17,15 +15,28 @@ const updateCartCount = () => {
 }
 
 const addToCart = (product) => {
-    const existing = cart.find(item => item.id === product.id)
-    if (existing) {
-        existing.quantity += 1
-    } else {
-        cart.push({ ...product, quantity: 1 })
+    // Check if user is logged in
+    const user = checkSession();
+    if (!user) {
+        alert('Please login or sign up to add items to cart!');
+        // Check if we're on index.html or in pages folder
+        if (window.location.pathname.includes('/pages/')) {
+            window.location.href = 'login.html';
+        } else {
+            window.location.href = 'pages/login.html';
+        }
+        return;
     }
-    localStorage.setItem('insidelautech_cart', JSON.stringify(cart))
-    updateCartCount()
-    alert('Added to cart!')
+
+    const existing = cart.find(item => item.id === product.id);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
+    localStorage.setItem('insidelautech_cart', JSON.stringify(cart));
+    updateCartCount();
+    alert('Added to cart!');
 }
 
 const removeFromCart = (productId) => {

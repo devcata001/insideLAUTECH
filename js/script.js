@@ -16,93 +16,80 @@ if (localStorage.insidelautechUsers) {
 const signUp = (event) => {
     event.preventDefault();
 
-    if (fullname.value.trim() === '' || email.value.trim() === '' || password.value.trim() === '' || confirmPassword.value.trim() === '') {
-        showError.style.display = 'block'
-        showError2.style.display = 'none'
-        alert('Please fill in all required fields.')
-        return
-    } else {
-        showError.style.display = 'none'
+    // Get form elements
+    const fullname = document.getElementById('fullname');
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const matric = document.getElementById('matric');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const terms = document.getElementById('terms');
+
+    if (!fullname || !email || !password || !confirmPassword) {
+        alert('Form elements not found. Please refresh the page.');
+        return;
     }
 
-    const regexString = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    const confirmEmail = regexString.test(email.value.trim())
+    if (fullname.value.trim() === '' || email.value.trim() === '' || password.value.trim() === '' || confirmPassword.value.trim() === '') {
+        alert('Please fill in all required fields.');
+        return;
+    }
+
+    const regexString = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const confirmEmail = regexString.test(email.value.trim());
 
     if (!confirmEmail) {
-        showError2.style.display = 'block'
-        alert('Please enter a valid email address.')
-        return
-    } else {
-        showError2.style.display = 'none'
+        alert('Please enter a valid email address.');
+        return;
     }
 
     if (password.value.length < 8) {
-        alert('Password must be at least 8 characters.')
-        return
+        alert('Password must be at least 8 characters.');
+        return;
     }
 
     if (password.value !== confirmPassword.value) {
-        alert('Passwords do not match.')
-        return
+        alert('Passwords do not match.');
+        return;
     }
 
     if (!terms.checked) {
-        alert('You must agree to the Terms & Conditions.')
-        return
+        alert('You must agree to the Terms & Conditions.');
+        return;
     }
 
     const userObj = {
-        full_name: fullname.value,
-        mail: email.value.trim(),
+        name: fullname.value,
+        email: email.value.trim(),
         phone: phone.value,
         matric: matric.value,
-        pass: password.value
-    }
+        password: password.value
+    };
 
-    const found = allUsers.find(user => user.mail === userObj.mail)
+    const found = allUsers.find(user => user.email === userObj.email);
     if (found) {
-        alert('An account with this email already exists.')
-        return
+        alert('An account with this email already exists.');
+        return;
     }
 
-    allUsers.push(userObj)
-    localStorage.setItem('insidelautechUsers', JSON.stringify(allUsers))
+    allUsers.push(userObj);
+    localStorage.setItem('insidelautechUsers', JSON.stringify(allUsers));
 
-    fullname.value = ''
-    email.value = ''
-    phone.value = ''
-    matric.value = ''
-    password.value = ''
-    confirmPassword.value = ''
+    alert('Account created successfully! Please login.');
 
-    window.location.href = 'login.html'
+    fullname.value = '';
+    email.value = '';
+    phone.value = '';
+    matric.value = '';
+    password.value = '';
+    confirmPassword.value = '';
+    terms.checked = false;
+
+    window.location.href = 'login.html';
 }
 
 // Attach event listeners when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form.auth-form');
     form?.addEventListener('submit', signUp);
-
-    // password visibility toggles
-    togglePassword?.addEventListener('click', () => {
-        const icon = togglePassword.querySelector('i');
-        if (password.type === 'password') {
-            password.type = 'text';
-            icon?.classList.replace('bi-eye', 'bi-eye-slash');
-        } else {
-            password.type = 'password';
-            icon?.classList.replace('bi-eye-slash', 'bi-eye');
-        }
-    });
-
-    toggleConfirmPassword?.addEventListener('click', () => {
-        const icon = toggleConfirmPassword.querySelector('i');
-        if (confirmPassword.type === 'password') {
-            confirmPassword.type = 'text';
-            icon?.classList.replace('bi-eye', 'bi-eye-slash');
-        } else {
-            confirmPassword.type = 'password';
-            icon?.classList.replace('bi-eye-slash', 'bi-eye');
-        }
-    });
 });
