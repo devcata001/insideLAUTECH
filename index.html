@@ -29,22 +29,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#home">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#categories">Categories</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="pages/products.html">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#services">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tutorials">Tutorials</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#testimonials">Reviews</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="pages/cart.html"><i class="bi bi-cart3"></i> Cart</a>
@@ -488,12 +473,22 @@
             }
             alert(`Contacting ${tutorName}...\n\nYour request has been sent! The tutor will reach out to you via your registered email: ${user.email}`)
         }
+
+        // Auto-close navbar on mobile when clicking links
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link')
+        const navbarToggler = document.querySelector('.navbar-toggler')
+        const navbarCollapse = document.querySelector('.navbar-collapse')
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
+                    navbarToggler.click()
+                }
+            })
+        })
     </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
 </body>
 
 </html>
