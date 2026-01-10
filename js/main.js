@@ -1,75 +1,97 @@
-// cart management
 let cart = []
 if (localStorage.insidelautech_cart) {
     cart = JSON.parse(localStorage.getItem('insidelautech_cart'))
-} else {
-    cart = []
 }
 
 const updateCartCount = () => {
     const cartCount = document.getElementById('cartCount')
     if (cartCount) {
-        const total = cart.reduce((sum, item) => sum + item.quantity, 0)
+        let total = 0
+        for (let i = 0; i < cart.length; i++) {
+            total = total + cart[i].quantity
+        }
         cartCount.textContent = total
     }
 }
 
 const addToCart = (product) => {
-    // Check if user is logged in
-    const user = checkSession();
+    const user = checkSession()
     if (!user) {
-        alert('Please login or sign up to add items to cart!');
-        // Check if we're on index.html or in pages folder
+        alert('Please login or sign up to add items to cart!')
         if (window.location.pathname.includes('/pages/')) {
-            window.location.href = 'login.html';
+            window.location.href = 'login.html'
         } else {
-            window.location.href = 'pages/login.html';
+            window.location.href = 'pages/login.html'
         }
-        return;
+        return
     }
 
-    const existing = cart.find(item => item.id === product.id);
-    if (existing) {
-        existing.quantity += 1;
-    } else {
-        cart.push({ ...product, quantity: 1 });
+    let found = false
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].id === product.id) {
+            cart[i].quantity = cart[i].quantity + 1
+            found = true
+            break
+        }
     }
-    localStorage.setItem('insidelautech_cart', JSON.stringify(cart));
-    updateCartCount();
-    alert('Added to cart!');
+
+    if (!found) {
+        const newItem = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            category: product.category,
+            quantity: 1
+        }
+        cart.push(newItem)
+    }
+
+    localStorage.setItem('insidelautech_cart', JSON.stringify(cart))
+    updateCartCount()
+    alert('Added to cart!')
 }
 
 const removeFromCart = (productId) => {
-    cart = cart.filter(item => item.id !== productId)
+    let newCart = []
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].id !== productId) {
+            newCart.push(cart[i])
+        }
+    }
+    cart = newCart
     localStorage.setItem('insidelautech_cart', JSON.stringify(cart))
     updateCartCount()
 }
 
 const updateQuantity = (productId, newQuantity) => {
-    const item = cart.find(item => item.id === productId)
-    if (item) {
-        if (newQuantity <= 0) {
-            removeFromCart(productId)
-        } else {
-            item.quantity = newQuantity
-            localStorage.setItem('insidelautech_cart', JSON.stringify(cart))
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].id === productId) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId)
+            } else {
+                cart[i].quantity = newQuantity
+                localStorage.setItem('insidelautech_cart', JSON.stringify(cart))
+            }
+            break
         }
     }
 }
 
 const getCartTotal = () => {
-    return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+    let total = 0
+    for (let i = 0; i < cart.length; i++) {
+        total = total + (cart[i].price * cart[i].quantity)
+    }
+    return total
 }
 
-// session management
 const checkSession = () => {
     const session = localStorage.getItem('insidelautech_session')
     if (session) {
-        try {
-            const user = JSON.parse(session)
-            return user.loggedIn ? user : null
-        } catch (err) {
-            return null
+        const user = JSON.parse(session)
+        if (user.loggedIn) {
+            return user
         }
     }
     return null
@@ -80,7 +102,6 @@ const logout = () => {
     window.location.href = '../index.html'
 }
 
-// update nav based on session
 const updateNav = () => {
     const user = checkSession()
     const loginLink = document.getElementById('loginLink')
@@ -98,7 +119,6 @@ const updateNav = () => {
     }
 }
 
-// sample products data
 const products = [
     { id: 1, name: 'Calculus Textbook', category: 'textbooks', price: 3500, image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400', rating: 4.5, description: 'Engineering Mathematics by K.A. Stroud' },
     { id: 2, name: 'HP Laptop', category: 'electronics', price: 185000, image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400', rating: 4.8, description: 'HP Pavilion 15, 8GB RAM, 256GB SSD' },
@@ -114,7 +134,6 @@ const products = [
     { id: 12, name: 'Earphones', category: 'electronics', price: 4500, image: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400', rating: 4.3, description: 'JBL wired earphones with mic' }
 ]
 
-// init
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCount()
     updateNav()
