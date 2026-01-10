@@ -109,7 +109,11 @@ const updateNav = () => {
 
     if (user && loginLink && signupLink) {
         loginLink.innerHTML = '<i class="bi bi-person-circle"></i> Dashboard'
-        loginLink.href = 'dashboard.html'
+        if (window.location.pathname.includes('/pages/')) {
+            loginLink.href = 'dashboard.html'
+        } else {
+            loginLink.href = 'pages/dashboard.html'
+        }
         signupLink.innerHTML = 'Logout'
         signupLink.href = '#'
         signupLink.onclick = (e) => {
