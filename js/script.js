@@ -6,14 +6,6 @@ if (localStorage.insidelautechUsers) {
 const signUp = (event) => {
     event.preventDefault()
 
-    const fullname = document.getElementById('fullname')
-    const email = document.getElementById('email')
-    const phone = document.getElementById('phone')
-    const matric = document.getElementById('matric')
-    const password = document.getElementById('password')
-    const confirmPassword = document.getElementById('confirmPassword')
-    const terms = document.getElementById('terms')
-
     if (!fullname || !email || !password || !confirmPassword) {
         alert('Form elements not found. Please refresh the page.')
         return

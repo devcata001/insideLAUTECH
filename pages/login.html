@@ -140,20 +140,17 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('loginForm')
-            const emailInput = document.getElementById('email')
-            const passwordInput = document.getElementById('password')
-            const rememberMe = document.getElementById('rememberMe')
 
             const remembered = localStorage.getItem('insideLAUTECH_rememberedEmail')
             if (remembered) {
-                emailInput.value = remembered
+                email.value = remembered
                 rememberMe.checked = true
             }
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault()
 
-                if (!emailInput.value.trim() || !passwordInput.value) {
+                if (!email.value.trim() || !password.value) {
                     alert('Please fill in all fields')
                     return
                 }
@@ -166,7 +163,7 @@
 
                 let account = null
                 for (let i = 0; i < registeredUsers.length; i++) {
-                    if (registeredUsers[i].email === emailInput.value.trim()) {
+                    if (registeredUsers[i].email === email.value.trim()) {
                         account = registeredUsers[i]
                         break
                     }
@@ -177,7 +174,7 @@
                     return
                 }
 
-                if (account.password !== passwordInput.value) {
+                if (account.password !== password.value) {
                     alert('Incorrect password. Please try again.')
                     return
                 }
@@ -194,7 +191,7 @@
                 localStorage.setItem('insidelautech_session', JSON.stringify(session))
 
                 if (rememberMe.checked) {
-                    localStorage.setItem('insideLAUTECH_rememberedEmail', emailInput.value.trim())
+                    localStorage.setItem('insideLAUTECH_rememberedEmail', email.value.trim())
                 } else {
                     localStorage.removeItem('insideLAUTECH_rememberedEmail')
                 }
