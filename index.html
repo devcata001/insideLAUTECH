@@ -240,7 +240,6 @@
     </section>
 
     <script>
-        // add functionality to product buttons on homepage
         document.addEventListener('DOMContentLoaded', () => {
             const addToCartButtons = document.querySelectorAll('#products .btn-primary')
             addToCartButtons.forEach((btn, index) => {
@@ -329,7 +328,7 @@
                                 <small class="text-dark">Engineering Student</small>
                             </div>
                         </div>
-                        <p class="text-dark"> InsideLAUTECH saved me so much time! I can order my textbooks and have
+                        <p class="text-dark">"InsideLAUTECH saved me so much time! I can order my textbooks and have
                             them
                             delivered to my hostel. Amazing service!"</p>
                     </div>
@@ -356,7 +355,7 @@
                                 <small class="text-dark">Computer Science Student</small>
                             </div>
                         </div>
-                        <p class="text-dark">"Great platform! I found all my tech needs here at student-friendly
+                        <p class="text-dark">"Great platform! I got all my tech gadgets here at student-friendly
                             prices. Highly recommended!"</p>
                     </div>
                 </div>
@@ -429,10 +428,8 @@
         </div>
     </footer>
 
-    <!-- Main JS -->
     <script src="js/main.js"></script>
     <script>
-        // make categories clickable
         document.addEventListener('DOMContentLoaded', () => {
             const categories = document.querySelectorAll('.category-card')
             categories.forEach(card => {
@@ -443,7 +440,6 @@
                 })
             })
 
-            // make service cards clickable  
             const serviceCards = document.querySelectorAll('.service-card')
             serviceCards.forEach(card => {
                 card.style.cursor = 'pointer'
@@ -463,7 +459,6 @@
             })
         })
 
-        // tutor contact function
         const contactTutor = (tutorName) => {
             const user = checkSession ? checkSession() : null
             if (!user) {
@@ -474,7 +469,6 @@
             alert(`Contacting ${tutorName}...\n\nYour request has been sent! The tutor will reach out to you via your registered email: ${user.email}`)
         }
 
-        // Auto-close navbar on mobile when clicking links
         const navLinks = document.querySelectorAll('.navbar-nav .nav-link')
         const navbarToggler = document.querySelector('.navbar-toggler')
         const navbarCollapse = document.querySelector('.navbar-collapse')

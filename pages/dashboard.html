@@ -161,27 +161,23 @@
 
     <script src="../js/main.js"></script>
     <script>
-        // check if user is logged in
         const user = checkSession()
         if (!user) {
             alert('Please login to access dashboard')
             window.location.href = 'login.html'
         }
 
-        // load user info
         document.getElementById('userName').textContent = user.name
         document.getElementById('userEmail').textContent = user.email
         document.getElementById('profileName').value = user.name
         document.getElementById('profileEmail').value = user.email
         document.getElementById('profilePhone').value = user.phone || 'Not provided'
         document.getElementById('profileMatric').value = user.matric || 'Not provided'
-        
-        // set member since date
+
         document.getElementById('memberSince').innerHTML = `
             <i class="bi bi-info-circle"></i> Member since ${new Date().toLocaleDateString()}
         `
 
-        // load favorites (random products for demo)
         const favorites = products.slice(0, 6)
         document.getElementById('totalFavorites').textContent = favorites.length
         document.getElementById('favoritesGrid').innerHTML = favorites.map(p => `

@@ -150,7 +150,6 @@
                     </div>
                 `
 
-                // show related products
                 const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3)
                 if (related.length > 0) {
                     document.getElementById('relatedProducts').innerHTML = related.map(p => `
@@ -195,7 +194,6 @@
             }
         }
 
-        // Auto-close navbar on mobile when clicking links
         const navLinks = document.querySelectorAll('.navbar-nav .nav-link')
         const navbarToggler = document.querySelector('.navbar-toggler')
         const navbarCollapse = document.querySelector('.navbar-collapse')
