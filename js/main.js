@@ -213,6 +213,8 @@ const updateNav = () => {
     const loginLink = document.getElementById('loginLink')
     const signupLink = document.getElementById('signupLink')
     const cartLink = document.getElementById('cartNavLink')
+    const productsCtaLink = document.getElementById('productsCtaLink')
+    const productsNavLinks = document.querySelectorAll('.navbar-nav .nav-link[href]')
 
     const setNavVisibility = (element, isVisible) => {
         if (!element) {
@@ -228,6 +230,25 @@ const updateNav = () => {
 
     if (cartLink) {
         setNavVisibility(cartLink, !!user)
+    }
+
+    if (productsNavLinks.length) {
+        productsNavLinks.forEach(link => {
+            const href = link.getAttribute('href') || ''
+            if (href.includes('products.html')) {
+                setNavVisibility(link, !!user)
+            }
+        })
+    }
+
+    if (productsCtaLink) {
+        if (user) {
+            productsCtaLink.href = 'pages/products.html'
+            productsCtaLink.textContent = 'View All Products'
+        } else {
+            productsCtaLink.href = 'pages/signup.html'
+            productsCtaLink.textContent = 'Sign Up to View Products'
+        }
     }
 
     if (user) {
