@@ -47,12 +47,12 @@ const signUp = (event, formElements) => {
 
     if (!fullname || !email || !password || !confirmPassword) {
         showToast('Form elements not found. Please refresh the page.', 'error')
-        return
+        return false
     }
 
     if (fullname.value.trim() === '' || email.value.trim() === '' || password.value.trim() === '' || confirmPassword.value.trim() === '') {
         showToast('Please fill in all required fields.', 'warning')
-        return
+        return false
     }
 
     const normalizedEmail = email.value.trim().toLowerCase()
@@ -61,34 +61,34 @@ const signUp = (event, formElements) => {
 
     if (!validEmail) {
         showToast('Please enter a valid email address.', 'warning')
-        return
+        return false
     }
 
     if (!normalizedEmail.endsWith('.com')) {
         showToast('Please use a .com email address (school domains are not allowed).', 'warning')
-        return
+        return false
     }
 
     const normalizedPhone = phone.value.trim()
     if (!/^\+?\d{10,15}$/.test(normalizedPhone.replace(/\s+/g, ''))) {
         showToast('Enter a valid phone number (10-15 digits).', 'warning')
-        return
+        return false
     }
 
     const hasStrongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password.value)
     if (!hasStrongPassword) {
         showToast('Use a stronger password with upper/lowercase letters and a number.', 'warning')
-        return
+        return false
     }
 
     if (password.value !== confirmPassword.value) {
         showToast('Passwords do not match.', 'warning')
-        return
+        return false
     }
 
     if (!terms.checked) {
         showToast('You must agree to the Terms & Conditions.', 'warning')
-        return
+        return false
     }
 
     const userObj = {
@@ -111,13 +111,13 @@ const signUp = (event, formElements) => {
 
     if (found) {
         showToast('An account already exists with this email.', 'warning')
-        return
+        return false
     }
 
     allUsers.push(userObj)
     localStorage.setItem('insidelautechUsers', JSON.stringify(allUsers))
 
-    showToast('Account created successfully! Please login.', 'success')
+    showToast('Account created successfully! Redirecting to login...', 'success')
 
     fullname.value = ''
     email.value = ''
@@ -128,7 +128,9 @@ const signUp = (event, formElements) => {
 
     setTimeout(() => {
         window.location.href = 'login.html'
-    }, 1200)
+    }, 1500)
+
+    return true
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -138,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return
     }
 
-    const form = document.querySelector('form.auth-form')
+    const form = document.querySelector('form#signupForm, form.auth-form')
     const formElements = {
         fullname: document.getElementById('fullname'),
         email: document.getElementById('email'),
@@ -166,6 +168,15 @@ document.addEventListener('DOMContentLoaded', () => {
     updateConfirmPasswordHint(formElements.password, formElements.confirmPassword, confirmPasswordHint)
 
     if (form) {
-        form.addEventListener('submit', (event) => signUp(event, formElements))
+        form.addEventListener('submit', (event) => {
+            event.preventDefault()
+            signUp(event, formElements)
+        })
+    } else {
+        console.warn('Signup form not found. Checking for button click fallback...')
+        const submitBtn = document.querySelector('button[type="submit"]')
+        if (submitBtn && !formElements.fullname) {
+            showToast('Form elements not properly loaded. Please refresh.', 'error')
+        }
     }
 })

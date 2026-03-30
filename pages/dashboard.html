@@ -164,7 +164,7 @@
             <div class="col-md-9">
                 <!-- Profile Section -->
                 <div id="profileSection" class="section-content">
-                    <div class="row g-3 mb-4">
+                    <div class="row g-4 mb-4">
                         <div class="col-md-6">
                             <div class="card dashboard-stat h-100">
                                 <div class="card-body d-flex justify-content-between align-items-center">
@@ -224,11 +224,7 @@
                     <div class="card dashboard-panel">
                         <div class="card-body">
                             <h4 class="mb-4"><i class="bi bi-bag"></i> My Orders</h4>
-                            <div class="text-center py-5">
-                                <i class="bi bi-bag-x fs-1 text-muted"></i>
-                                <p class="text-muted mt-3">No orders yet</p>
-                                <a href="products.html" class="btn btn-primary">Start Shopping</a>
-                            </div>
+                            <div id="ordersContainer"></div>
                         </div>
                     </div>
                 </div>
@@ -257,6 +253,159 @@
             <i class="bi bi-info-circle"></i> Member since ${new Date().toLocaleDateString()}
         `
 
+        const updateTotalOrders = () => {
+            const allOrders = JSON.parse(localStorage.getItem('insidelautech_orders') || '[]')
+            const userOrders = allOrders.filter(order => order.userId === user.email)
+            const totalOrdersElement = document.getElementById('totalOrders')
+            if (totalOrdersElement) {
+                totalOrdersElement.textContent = userOrders.length
+            }
+        }
+
+        updateTotalOrders()
+
+        const loadUserOrders = () => {
+            const allOrders = JSON.parse(localStorage.getItem('insidelautech_orders') || '[]')
+            const userOrders = allOrders.filter(order => order.userId === user.email)
+            const ordersContainer = document.getElementById('ordersContainer')
+
+            if (!ordersContainer) return
+
+            if (userOrders.length === 0) {
+                ordersContainer.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="bi bi-bag-x fs-1 text-muted"></i>
+                        <p class="text-muted mt-3">No orders yet</p>
+                        <a href="products.html" class="btn btn-primary">Start Shopping</a>
+                    </div>
+                `
+                return
+            }
+
+            ordersContainer.innerHTML = userOrders.map(order => `
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Order #${order.orderId}</h6>
+                                <small class="text-muted">${new Date(order.createdAt).toLocaleDateString()}</small>
+                            </div>
+                            <span class="badge bg-success">₦${order.total.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <p class="mb-2"><strong>${order.items.length} item(s)</strong></p>
+                                <small class="text-muted">${order.items.map(i => i.name).join(', ')}</small>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <button class="btn btn-sm btn-outline-primary" onclick="viewReceipt('${order.orderId}')">
+                                    <i class="bi bi-receipt"></i> View Receipt
+                                </button>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="alert alert-info mb-0">
+                            <strong>Delivery Code:</strong> <span class="fs-5 fw-bold">${order.deliveryCode}</span>
+                            <small class="d-block mt-1">Show this code on delivery confirmation</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('')
+        }
+
+        const viewReceipt = (orderId) => {
+            const allOrders = JSON.parse(localStorage.getItem('insidelautech_orders') || '[]')
+            const order = allOrders.find(o => o.orderId === orderId)
+
+            if (!order) {
+                alert('Order not found')
+                return
+            }
+
+            const receiptHtml = `
+                <div class="card">
+                    <div class="card-header bg-dark text-white text-center">
+                        <h4 class="mb-0">InsideLAUTECH Receipt</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center"><strong>Order #${order.orderId}</strong></p>
+                        <p class="text-center text-muted">Date: ${new Date(order.createdAt).toLocaleString()}</p>
+                        <hr>
+                        <h6 class="mb-3">Order Items:</h6>
+                        <div class="mb-3">
+                            ${order.items.map(item => `
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>${item.name} x${item.quantity}</span>
+                                    <strong>₦${(item.price * item.quantity).toLocaleString()}</strong>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>₦${(order.total - 500).toLocaleString()}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Delivery Fee:</span>
+                            <span>₦500</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <strong>Total:</strong>
+                            <strong class="text-success fs-5">₦${order.total.toLocaleString()}</strong>
+                        </div>
+                        <hr>
+                        <div class="alert alert-info mt-3">
+                            <strong>Delivery Confirmation Code:</strong>
+                            <p class="fs-4 fw-bold text-center mb-0">${order.deliveryCode}</p>
+                        </div>
+                        <p class="text-muted text-center small mt-3">Thank you for shopping at InsideLAUTECH!</p>
+                    </div>
+                </div>
+            `
+
+            const modalHtml = `
+                <div class="modal fade" id="receiptModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Order Receipt</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${receiptHtml}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="printReceipt(this)">
+                                    <i class="bi bi-printer"></i> Print
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+
+            let modal = document.getElementById('receiptModal')
+            if (modal) {
+                modal.remove()
+            }
+
+            document.body.insertAdjacentHTML('beforeend', modalHtml)
+            modal = new bootstrap.Modal(document.getElementById('receiptModal'))
+            modal.show()
+        }
+
+        const printReceipt = (btn) => {
+            const content = btn.closest('.modal-body').innerHTML
+            const printWindow = window.open('', '', 'height=600,width=800')
+            printWindow.document.write(content)
+            printWindow.document.close()
+            printWindow.print()
+        }
+
         const showSection = (section) => {
             document.querySelectorAll('.section-content').forEach(s => s.style.display = 'none')
             document.querySelectorAll('.dashboard-nav-btn').forEach(b => b.classList.remove('active'))
@@ -265,6 +414,7 @@
                 document.getElementById('profileSection').style.display = 'block'
             } else if (section === 'orders') {
                 document.getElementById('ordersSection').style.display = 'block'
+                loadUserOrders()
             }
 
             const activeBtn = document.querySelector(`.dashboard-nav-btn[data-section="${section}"]`)
@@ -272,6 +422,9 @@
                 activeBtn.classList.add('active')
             }
         }
+
+        window.viewReceipt = viewReceipt
+        window.printReceipt = printReceipt
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -304,6 +304,7 @@
 
             const totalAmount = getCartTotal() + 500
             const paymentReference = `INSIDE-${Date.now()}`
+            const cartItemsCopy = [...cart]
 
             payWithPaystack({
                 amount: totalAmount,
@@ -315,8 +316,11 @@
                         { display_name: 'Cart Items', variable_name: 'cart_items', value: `${cart.length}` }
                     ]
                 },
-                onSuccess: () => {
+                onSuccess: (response) => {
                     showToast(`Payment successful! Total: ₦${totalAmount.toLocaleString()}`, 'success')
+
+                    createOrder(cartItemsCopy, totalAmount, user.email, user.name, user.email, paymentReference)
+
                     cart = []
                     localStorage.setItem('insidelautech_cart', JSON.stringify(cart))
                     updateCartCount()

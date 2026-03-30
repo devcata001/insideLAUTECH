@@ -160,6 +160,37 @@ const logout = () => {
     }
 }
 
+const generateDeliveryCode = () => {
+    const code = String(Math.floor(Math.random() * 10000)).padStart(4, '0')
+    return code
+}
+
+const createOrder = (items, total, userId, userName, userEmail, paymentRef) => {
+    const orders = JSON.parse(localStorage.getItem('insidelautech_orders') || '[]')
+    const newOrder = {
+        orderId: `ORD-${Date.now()}`,
+        userId: userEmail,
+        userName: userName,
+        items: items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            category: item.category
+        })),
+        total: total,
+        paymentRef: paymentRef,
+        deliveryCode: generateDeliveryCode(),
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        deliveredAt: null
+    }
+
+    orders.push(newOrder)
+    localStorage.setItem('insidelautech_orders', JSON.stringify(orders))
+    return newOrder
+}
+
 const payWithPaystack = ({ amount, email, reference, metadata, onSuccess, onCancel }) => {
     if (!window.PaystackPop) {
         showToast('Paystack script is not loaded on this page.', 'error')
@@ -394,3 +425,5 @@ window.showToast = showToast
 window.payWithPaystack = payWithPaystack
 window.setPaystackTestKey = setPaystackTestKey
 window.getFallbackImage = getFallbackImage
+window.createOrder = createOrder
+window.generateDeliveryCode = generateDeliveryCode
