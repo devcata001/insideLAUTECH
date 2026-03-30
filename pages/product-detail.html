@@ -54,9 +54,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="products.html">Products</a>
                     </li>
                     <li class="nav-item">
@@ -95,6 +92,7 @@
         </div>
     </div>
 
+    <script src="../data/products-data.js"></script>
     <script src="../js/main.js"></script>
     <script>
         (() => {
@@ -133,7 +131,7 @@
                     document.getElementById('productDetail').innerHTML = `
                     <div class="col-md-6">
                         <img src="${product.image}" class="img-fluid w-100" alt="${product.name}" 
-                             style="height: 500px; object-fit: cover;">
+                             style="height: 500px; object-fit: cover;" onerror="this.src=getFallbackImage('Product', 700, 500)">
                     </div>
                     <div class="col-md-6 detail-section">
                         <h2 class="mb-3">${product.name}</h2>
@@ -173,7 +171,7 @@
                         document.getElementById('relatedProducts').innerHTML = related.map(p => `
                         <div class="col-md-4">
                             <div class="card related-card h-100" onclick="window.location.href='product-detail.html?id=${p.id}'" style="cursor: pointer;">
-                                <img src="${p.image}" class="card-img-top" alt="${p.name}" style="height: 200px; object-fit: cover;">
+                                <img src="${p.image}" class="card-img-top" alt="${p.name}" style="height: 200px; object-fit: cover;" onerror="this.src=getFallbackImage('Product', 300, 200)">
                                 <div class="card-body">
                                     <h6 class="card-title">${p.name}</h6>
                                     <p class="text-success fw-bold mb-2">₦${p.price.toLocaleString()}</p>

@@ -183,8 +183,8 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-md-2">
-                                <img src="${item.image}" class="cart-thumb" alt="${item.name}"
-                                     onerror="this.src='https://via.placeholder.com/100?text=${item.name}'"
+                                  <img src="${item.image}" class="cart-thumb" alt="${item.name}"
+                                      onerror="this.src=getFallbackImage('Item', 100, 100)"
                                      >
                             </div>
                             <div class="col-md-4">

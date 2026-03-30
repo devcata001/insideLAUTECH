@@ -100,22 +100,6 @@
             color: #0d6efd;
         }
 
-        .stat-icon.success {
-            background: rgba(25, 135, 84, 0.12);
-            color: #198754;
-        }
-
-        .stat-icon.warning {
-            background: rgba(255, 193, 7, 0.2);
-            color: #9d7400;
-        }
-
-        .favorites-card {
-            border: 1px solid rgba(26, 29, 41, 0.08);
-            border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-        }
-
         @media (max-width: 767px) {
             .dashboard-page .container {
                 padding-left: 1rem;
@@ -128,7 +112,7 @@
 <body class="dashboard-page">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="../index.html">
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
                 <img src="../assets/lautech.png" alt="LAUTECH Logo" height="40" class="me-2">
                 <span class="brand-text">InsideLAUTECH</span>
             </a>
@@ -137,12 +121,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="products.html">Products</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="cart.html">
                             <i class="bi bi-cart3"></i> Cart <span id="cartCount" class="badge bg-danger">0</span>
@@ -178,10 +156,6 @@
                                 onclick="showSection('orders', this)">
                                 <i class="bi bi-bag"></i> Orders
                             </button>
-                            <button class="dashboard-nav-btn" data-section="favorites"
-                                onclick="showSection('favorites', this)">
-                                <i class="bi bi-heart"></i> Favorites
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -190,6 +164,34 @@
             <div class="col-md-9">
                 <!-- Profile Section -->
                 <div id="profileSection" class="section-content">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="card dashboard-stat h-100">
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="stat-title">Total Orders</p>
+                                        <p id="totalOrders" class="stat-value">0</p>
+                                    </div>
+                                    <span class="stat-icon primary"><i class="bi bi-bag-check"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card dashboard-stat h-100">
+                                <div
+                                    class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                    <div>
+                                        <p class="stat-title mb-1">Quick Action</p>
+                                        <p class="stat-value fs-4 mb-0">Shop Now</p>
+                                    </div>
+                                    <a href="products.html" class="btn btn-primary">
+                                        <i class="bi bi-cart-plus"></i> Shop Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card dashboard-panel">
                         <div class="card-body">
                             <h4 class="mb-4"><i class="bi bi-person-circle"></i> Profile Information</h4>
@@ -215,41 +217,6 @@
                         </div>
                     </div>
 
-                    <div class="row mt-4">
-                        <div class="col-md-4">
-                            <div class="card dashboard-stat">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="stat-title">Total Orders</p>
-                                        <p id="totalOrders" class="stat-value">0</p>
-                                    </div>
-                                    <span class="stat-icon primary"><i class="bi bi-bag-check"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card dashboard-stat">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="stat-title">Favorites</p>
-                                        <p id="totalFavorites" class="stat-value">0</p>
-                                    </div>
-                                    <span class="stat-icon success"><i class="bi bi-heart"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card dashboard-stat">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="stat-title">Your Rating</p>
-                                        <p class="stat-value">4.8</p>
-                                    </div>
-                                    <span class="stat-icon warning"><i class="bi bi-star"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Orders Section -->
@@ -266,21 +233,11 @@
                     </div>
                 </div>
 
-                <!-- Favorites Section -->
-                <div id="favoritesSection" class="section-content" style="display: none;">
-                    <div class="card dashboard-panel">
-                        <div class="card-body">
-                            <h4 class="mb-4"><i class="bi bi-heart"></i> My Favorites</h4>
-                            <div class="row g-3" id="favoritesGrid">
-                                <!-- Show some random products as favorites -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
+    <script src="../data/products-data.js"></script>
     <script src="../js/main.js"></script>
     <script>
         const user = checkSession()
@@ -299,24 +256,6 @@
             <i class="bi bi-info-circle"></i> Member since ${new Date().toLocaleDateString()}
         `
 
-        const favorites = products.slice(0, 6)
-        document.getElementById('totalFavorites').textContent = favorites.length
-        document.getElementById('favoritesGrid').innerHTML = favorites.map(p => `
-            <div class="col-md-4">
-                <div class="card favorites-card h-100">
-                    <img src="${p.image}" class="card-img-top" alt="${p.name}" style="height: 150px; object-fit: cover;"
-                            onerror="this.src='https://via.placeholder.com/300x150?text=${p.name}'">
-                    <div class="card-body">
-                        <h6>${p.name}</h6>
-                        <p class="text-success fw-bold">₦${p.price.toLocaleString()}</p>
-                        <button onclick="addToCart(products.find(pr => pr.id === ${p.id}))" class="btn btn-sm btn-primary w-100">
-                            Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `).join('')
-
         const showSection = (section) => {
             document.querySelectorAll('.section-content').forEach(s => s.style.display = 'none')
             document.querySelectorAll('.dashboard-nav-btn').forEach(b => b.classList.remove('active'))
@@ -325,8 +264,6 @@
                 document.getElementById('profileSection').style.display = 'block'
             } else if (section === 'orders') {
                 document.getElementById('ordersSection').style.display = 'block'
-            } else if (section === 'favorites') {
-                document.getElementById('favoritesSection').style.display = 'block'
             }
 
             const activeBtn = document.querySelector(`.dashboard-nav-btn[data-section="${section}"]`)
