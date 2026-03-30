@@ -297,6 +297,7 @@ const updateNav = () => {
         if (signupLink) {
             signupLink.innerHTML = 'Logout'
             signupLink.href = '#'
+            signupLink.classList.add('logout-nav-link')
             signupLink.onclick = (e) => {
                 e.preventDefault()
                 logout()
@@ -311,6 +312,7 @@ const updateNav = () => {
         if (signupLink) {
             signupLink.textContent = 'Sign Up'
             signupLink.href = signupHref
+            signupLink.classList.remove('logout-nav-link')
             signupLink.onclick = null
         }
     }
