@@ -137,9 +137,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <button onclick="logout()" class="btn btn-outline-danger btn-sm">
+                        <a class="nav-link" href="#" id="dashboardLogoutLink">
                             <i class="bi bi-box-arrow-right"></i> Logout
-                        </button>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -251,6 +251,14 @@
         if (!user) {
             showToast('Please login to access dashboard', 'warning')
             window.location.href = 'login.html'
+        }
+
+        const dashboardLogoutLink = document.getElementById('dashboardLogoutLink')
+        if (dashboardLogoutLink) {
+            dashboardLogoutLink.addEventListener('click', (event) => {
+                event.preventDefault()
+                logout()
+            })
         }
 
         document.getElementById('userName').textContent = user.name
