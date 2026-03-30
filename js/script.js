@@ -51,7 +51,7 @@ const signUp = (event, formElements) => {
 
     let found = false
     for (let i = 0; i < allUsers.length; i++) {
-        if (allUsers[i].email === userObj.email) {
+        if ((allUsers[i].email || '').trim().toLowerCase() === userObj.email) {
             found = true
             break
         }
