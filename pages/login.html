@@ -142,6 +142,12 @@
     <!-- Bootstrap JS -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const activeSession = checkSession()
+            if (activeSession) {
+                window.location.href = 'dashboard.html'
+                return
+            }
+
             const form = document.getElementById('loginForm')
 
             const remembered = localStorage.getItem('insideLAUTECH_rememberedEmail')
@@ -201,7 +207,7 @@
 
                 showToast('Login successful! Welcome back.', 'success')
                 setTimeout(() => {
-                    window.location.href = '../index.html'
+                    window.location.href = 'dashboard.html'
                 }, 1000)
             })
         })

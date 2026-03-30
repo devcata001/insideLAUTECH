@@ -3,8 +3,10 @@ if (localStorage.insidelautechUsers) {
     allUsers = JSON.parse(localStorage.getItem('insidelautechUsers'))
 }
 
-const signUp = (event) => {
+const signUp = (event, formElements) => {
     event.preventDefault()
+
+    const { fullname, email, phone, matric, password, confirmPassword, terms } = formElements
 
     if (!fullname || !email || !password || !confirmPassword) {
         showToast('Form elements not found. Please refresh the page.', 'error')
@@ -40,10 +42,10 @@ const signUp = (event) => {
     }
 
     const userObj = {
-        name: fullname.value,
-        email: email.value.trim(),
-        phone: phone.value,
-        matric: matric.value,
+        name: fullname.value.trim(),
+        email: email.value.trim().toLowerCase(),
+        phone: phone.value.trim(),
+        matric: matric.value.trim(),
         password: password.value
     }
 
@@ -80,7 +82,17 @@ const signUp = (event) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form.auth-form')
+    const formElements = {
+        fullname: document.getElementById('fullname'),
+        email: document.getElementById('email'),
+        phone: document.getElementById('phone'),
+        matric: document.getElementById('matric'),
+        password: document.getElementById('password'),
+        confirmPassword: document.getElementById('confirmPassword'),
+        terms: document.getElementById('terms')
+    }
+
     if (form) {
-        form.addEventListener('submit', signUp)
+        form.addEventListener('submit', (event) => signUp(event, formElements))
     }
 })
