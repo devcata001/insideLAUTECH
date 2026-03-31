@@ -139,7 +139,10 @@
                             <option value="50000-999999">Above ₦50,000</option>
                         </select>
                     </div>
-                    <button onclick="applyFilters()" class="btn btn-primary w-100">Apply Filters</button>
+                    <div class="d-grid gap-2">
+                        <button onclick="applyFilters()" class="btn btn-primary w-100">Apply Filters</button>
+                        <button id="clearFiltersBtn" type="button" class="btn btn-outline-secondary w-100">Clear Filters</button>
+                    </div>
                 </div>
             </div>
 
@@ -185,6 +188,7 @@
             const searchInputEl = document.getElementById('searchInput')
             const categoryFilterEl = document.getElementById('categoryFilter')
             const priceFilterEl = document.getElementById('priceFilter')
+            const clearFiltersBtnEl = document.getElementById('clearFiltersBtn')
 
             const updateResultsCount = (count) => {
                 const el = document.getElementById('resultsCount')
@@ -305,7 +309,19 @@
             }
 
             searchInputEl.addEventListener('input', applyFilters)
+            categoryFilterEl.addEventListener('change', applyFilters)
+            priceFilterEl.addEventListener('change', applyFilters)
             sortFilterEl.addEventListener('change', applyFilters)
+
+            if (clearFiltersBtnEl) {
+                clearFiltersBtnEl.addEventListener('click', () => {
+                    searchInputEl.value = ''
+                    categoryFilterEl.value = 'all'
+                    priceFilterEl.value = 'all'
+                    sortFilterEl.value = 'default'
+                    applyFilters()
+                })
+            }
 
             const urlParams = new URLSearchParams(window.location.search)
             const categoryParam = urlParams.get('category')
@@ -317,7 +333,7 @@
                 }
                 applyFilters()
             } else {
-                renderProducts(products)
+                applyFilters()
             }
         })()
 

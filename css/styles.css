@@ -24,6 +24,17 @@ body {
     line-height: 1.6;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid rgba(192, 160, 98, 0.55) !important;
+    outline-offset: 2px;
+    box-shadow: none !important;
+}
+
 section {
     position: relative;
 }
@@ -191,6 +202,12 @@ html {
     overflow: hidden;
 }
 
+@media (max-width: 991px) {
+    .hero-section {
+        background-attachment: scroll;
+    }
+}
+
 .hero-section::before {
     content: '';
     position: absolute;
@@ -290,6 +307,26 @@ html {
 
 .fade-in.delay-1 {
     animation-delay: 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .fade-in-up,
+    .fade-in {
+        opacity: 1;
+        animation: none !important;
+    }
 }
 
 /* Category Cards */

@@ -64,11 +64,6 @@ const signUp = (event, formElements) => {
         return false
     }
 
-    if (!normalizedEmail.endsWith('.com')) {
-        showToast('Please use a .com email address (school domains are not allowed).', 'warning')
-        return false
-    }
-
     const normalizedPhone = phone.value.trim()
     if (!/^\+?\d{10,15}$/.test(normalizedPhone.replace(/\s+/g, ''))) {
         showToast('Enter a valid phone number (10-15 digits).', 'warning')

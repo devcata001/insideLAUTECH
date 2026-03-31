@@ -269,13 +269,16 @@
         document.getElementById('profileEmail').value = user.email
         document.getElementById('profilePhone').value = user.phone || 'Not provided'
 
+        const memberSinceDate = user.createdAt ? new Date(user.createdAt) : new Date()
         document.getElementById('memberSince').innerHTML = `
-            <i class="bi bi-info-circle"></i> Member since ${new Date().toLocaleDateString()}
+            <i class="bi bi-info-circle"></i> Member since ${memberSinceDate.toLocaleDateString()}
         `
 
         const updateTotalOrders = () => {
             const allOrders = JSON.parse(localStorage.getItem('insidelautech_orders') || '[]')
-            const userOrders = allOrders.filter(order => order.userId === user.email)
+            const userOrders = allOrders
+                .filter(order => order.userId === user.email)
+                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             const totalOrdersElement = document.getElementById('totalOrders')
             if (totalOrdersElement) {
                 totalOrdersElement.textContent = userOrders.length

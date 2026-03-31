@@ -22,6 +22,17 @@ body {
     background: #f6f7fb;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid rgba(192, 160, 98, 0.55) !important;
+    outline-offset: 2px;
+    box-shadow: none !important;
+}
+
 /* Auth Container */
 .auth-container {
     display: flex;
@@ -258,6 +269,16 @@ body {
 
 .input-icon-right:hover {
     color: var(--lautech-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
 .form-control {

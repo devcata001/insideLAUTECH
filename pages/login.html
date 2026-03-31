@@ -246,11 +246,6 @@
                     return
                 }
 
-                if (!normalizedEmail.endsWith('.com')) {
-                    showToast('Please use a .com email address to sign in.', 'warning')
-                    return
-                }
-
                 let registeredUsers = []
                 const stored = localStorage.getItem('insidelautechUsers')
                 if (stored) {
