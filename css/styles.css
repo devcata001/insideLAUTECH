@@ -106,16 +106,39 @@ html {
 
 
 .brand-logo {
-    height: 60px;
+    height: 90px;
     width: auto;
-    max-width: 320px;
+    max-width: 420px;
     object-fit: contain;
     display: block;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.18));
 }
 
 .footer-brand-logo {
-    height: 70px;
-    max-width: 340px;
+    height: 110px;
+    max-width: 480px;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.18));
+}
+
+@media (max-width: 991px) {
+    .brand-logo {
+        height: 64px;
+        max-width: 220px;
+    }
+    .footer-brand-logo {
+        height: 80px;
+        max-width: 260px;
+    }
+}
+@media (max-width: 600px) {
+    .brand-logo {
+        height: 48px;
+        max-width: 140px;
+    }
+    .footer-brand-logo {
+        height: 44px;
+        max-width: 120px;
+    }
 }
 
 .navbar-brand img {
