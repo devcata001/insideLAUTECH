@@ -104,16 +104,18 @@ html {
     color: var(--lautech-gold) !important;
 }
 
+
 .brand-logo {
-    height: 40px;
+    height: 60px;
     width: auto;
-    max-width: 220px;
+    max-width: 320px;
     object-fit: contain;
+    display: block;
 }
 
 .footer-brand-logo {
-    height: 46px;
-    max-width: 240px;
+    height: 70px;
+    max-width: 340px;
 }
 
 .navbar-brand img {
@@ -737,7 +739,7 @@ html {
     }
 
     .brand-logo {
-        height: 34px;
+        height: 48px;
     }
 }
 
