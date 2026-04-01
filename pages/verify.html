@@ -1,59 +1,29 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Email Verification - InsideLAUTECH</title>
-    <link rel="stylesheet" href="../css/signup.css" />
-  </head>
 
-  <body>
-    <div class="auth-container">
-      <div class="auth-form-section">
-        <div class="auth-form-container">
-          <div class="text-center mb-4">
-            <img
-              src="../assets/logo.png"
-              alt="InsideLAUTECH logo"
-              class="auth-logo mb-3"
-            />
-            <h2 class="form-title">Email Verification</h2>
-            <p class="form-subtitle" id="verifyMessage">
-              Verifying your account...
-            </p>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Verification - InsideLAUTECH</title>
+  <link rel="stylesheet" href="../css/signup.css" />
+</head>
+
+<body>
+  <div class="auth-container">
+    <div class="auth-form-section">
+      <div class="auth-form-container">
+        <div class="text-center mb-4">
+          <img src="../assets/logo.png" alt="InsideLAUTECH logo" class="auth-logo mb-3" />
+          <h2 class="form-title">Email Verification</h2>
+          <p class="form-subtitle" id="verifyMessage">
+            Verifying your account...
+          </p>
         </div>
       </div>
     </div>
-    <script>
-      async function verifyAccount() {
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get("token");
-        const msg = document.getElementById("verifyMessage");
-        if (!token) {
-          msg.textContent = "Invalid verification link.";
-          msg.style.color = "#dc3545";
-          return;
-        }
-        try {
-          const res = await fetch(
-            "http://localhost:5000/api/auth/verify?token=" +
-              encodeURIComponent(token),
-          );
-          const data = await res.json();
-          if (res.ok) {
-            msg.textContent = "Email verified! You can now log in.";
-            msg.style.color = "#198754";
-          } else {
-            msg.textContent = data.error || "Verification failed.";
-            msg.style.color = "#dc3545";
-          }
-        } catch (err) {
-          msg.textContent = "Network error. Please try again.";
-          msg.style.color = "#dc3545";
-        }
-      }
-      verifyAccount();
-    </script>
-  </body>
+  </div>
+  <script src="../js/api-config.js"></script>
+  <script src="../js/auth-verify.js"></script>
+</body>
+
 </html>

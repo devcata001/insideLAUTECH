@@ -212,12 +212,26 @@ const checkSession = () => {
 };
 
 const logout = () => {
-  localStorage.clear();
-  if (window.location.pathname.includes("/pages/")) {
-    window.location.href = "../index.html";
-  } else {
-    window.location.href = "index.html";
+  const redirectToHome = () => {
+    localStorage.clear();
+    if (window.location.pathname.includes("/pages/")) {
+      window.location.href = "../index.html";
+    } else {
+      window.location.href = "index.html";
+    }
+  };
+
+  if (typeof makeApiRequest === "function" && window.API_CONFIG) {
+    makeApiRequest(API_CONFIG.endpoints.auth.logout || "/api/auth/logout", {
+      method: "POST",
+      includeAuth: true,
+    })
+      .catch(() => null)
+      .finally(redirectToHome);
+    return;
   }
+
+  redirectToHome();
 };
 
 const generateDeliveryCode = () => {

@@ -48,18 +48,19 @@ const setupPasswordVisibilityToggles = () => {
 
 async function signupWithBackend(userObj) {
   try {
-    const res = await fetch("http://localhost:5000/api/auth/signup", {
+    if (typeof makeApiRequest !== "function" || !window.API_CONFIG) {
+      throw new Error("API client is not configured.");
+    }
+
+    return await makeApiRequest(API_CONFIG.endpoints.auth.signup, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      includeAuth: false,
+      body: {
         name: userObj.name,
         email: userObj.email,
         password: userObj.password,
-      }),
+      },
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Signup failed");
-    return data;
   } catch (err) {
     throw err;
   }

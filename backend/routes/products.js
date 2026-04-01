@@ -3,70 +3,142 @@ const router = express.Router();
 const Product = require("../models/Product");
 const jwt = require("jsonwebtoken");
 
-// Auth middleware (reuse from auth.js)
+// Auth middleware
 function auth(req, res, next) {
   const header = req.headers["authorization"];
-  if (!header) return res.status(401).json({ error: "No token" });
-  const token = header.split(" ")[1];
-  if (!token) return res.status(401).json({ error: "No token" });
+  const bearerToken = header && header.startsWith("Bearer ")
+    ? header.split(" ")[1]
+    : null;
+  const cookieToken = req.cookies?.insidelautech_auth;
+  const token = bearerToken || cookieToken;
+
+  if (!token) {
+    return res.status(401).json({ error: "No authorization token" });
+  }
+
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: "Invalid token" });
+    if (err) {
+      return res.status(403).json({ error: "Invalid or expired token" });
+    }
     req.user = user;
     next();
   });
 }
 
-// Create product (protected)
-router.post("/", auth, async (req, res) => {
+// Get all products (public)
+router.get("/", async (req, res) => {
   try {
-    const product = new Product(req.body);
-    await product.save();
-    res.status(201).json(product);
+    const products = await Product.find().select("-__v");
+    res.json(products);
   } catch (err) {
-    res
-      .status(400)
-      .json({ error: "Product creation failed", details: err.message });
+    console.error("Error fetching products:", err);
+    res.status(500).json({ error: "Failed to fetch products" });
   }
 });
 
-// Get all products
-router.get("/", async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
-});
-
-// Get single product
+// Get single product (public)
 router.get("/:id", async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ error: "Product not found" });
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ error: "Invalid product ID format" });
+    }
+
+    const product = await Product.findById(req.params.id).select("-__v");
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
     res.json(product);
   } catch (err) {
-    res.status(400).json({ error: "Invalid product ID" });
+    console.error("Error fetching product:", err);
+    res.status(500).json({ error: "Failed to fetch product" });
+  }
+});
+
+// Create product (protected - admin only ideally)
+router.post("/", auth, async (req, res) => {
+  try {
+    const { name, description, price, category } = req.body;
+
+    // Input validation
+    if (!name || !price) {
+      return res.status(400).json({
+        error: "Product name and price are required",
+      });
+    }
+
+    if (typeof price !== "number" || price < 0) {
+      return res.status(400).json({ error: "Invalid price" });
+    }
+
+    const product = new Product({
+      name: name.trim(),
+      description: description?.trim() || "",
+      price,
+      category: category?.trim() || "uncategorized",
+    });
+
+    await product.save();
+    res.status(201).json(product);
+  } catch (err) {
+    console.error("Error creating product:", err);
+    res.status(500).json({ error: "Failed to create product" });
   }
 });
 
 // Update product (protected)
 router.put("/:id", auth, async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ error: "Invalid product ID format" });
+    }
+
+    const { name, description, price, category } = req.body;
+
+    // Validate input
+    if (price !== undefined) {
+      if (typeof price !== "number" || price < 0) {
+        return res.status(400).json({ error: "Invalid price" });
+      }
+    }
+
+    const updates = {};
+    if (name) updates.name = name.trim();
+    if (description !== undefined) updates.description = description.trim();
+    if (price !== undefined) updates.price = price;
+    if (category) updates.category = category.trim();
+
+    const product = await Product.findByIdAndUpdate(req.params.id, updates, {
       new: true,
+      runValidators: true,
     });
-    if (!product) return res.status(404).json({ error: "Product not found" });
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
     res.json(product);
   } catch (err) {
-    res.status(400).json({ error: "Update failed", details: err.message });
+    console.error("Error updating product:", err);
+    res.status(500).json({ error: "Failed to update product" });
   }
 });
 
 // Delete product (protected)
 router.delete("/:id", auth, async (req, res) => {
   try {
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ error: "Invalid product ID format" });
+    }
+
     const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) return res.status(404).json({ error: "Product not found" });
-    res.json({ message: "Product deleted" });
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.json({ message: "Product deleted successfully" });
   } catch (err) {
-    res.status(400).json({ error: "Delete failed", details: err.message });
+    console.error("Error deleting product:", err);
+    res.status(500).json({ error: "Failed to delete product" });
   }
 });
 

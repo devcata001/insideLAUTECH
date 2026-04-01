@@ -1,0 +1,104 @@
+/**
+ * API Configuration
+ * Centralized endpoint management for frontend
+ * Change the API_BASE_URL based on environment
+ */
+
+// Detect environment
+const isDevelopment =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.protocol === 'file:';
+const isProduction = !isDevelopment;
+
+// API Configuration
+const API_CONFIG = {
+    // Use HTTPS in production
+    baseURL: isDevelopment
+        ? 'http://localhost:5000'
+        : 'https://api.insidelautech.com', // Update with your production domain
+
+    // API endpoints
+    endpoints: {
+        auth: {
+            signup: '/api/auth/signup',
+            login: '/api/auth/login',
+            logout: '/api/auth/logout',
+            verify: '/api/auth/verify',
+            resendVerification: '/api/auth/resend-verification',
+            me: '/api/auth/me',
+        },
+        products: {
+            list: '/api/products',
+            getOne: '/api/products/{id}',
+            create: '/api/products',
+            update: '/api/products/{id}',
+            delete: '/api/products/{id}',
+        },
+        orders: {
+            list: '/api/orders',
+            getOne: '/api/orders/{id}',
+            create: '/api/orders',
+        },
+    },
+
+    // Timeout for requests (ms)
+    timeout: 10000,
+
+    // Get full URL for an endpoint
+    getUrl: (endpoint) => {
+        return `${API_CONFIG.baseURL}${endpoint}`;
+    },
+};
+
+// Helper function to make authenticated API requests
+async function makeApiRequest(endpoint, options = {}) {
+    const {
+        method = 'GET',
+        body = null,
+        headers = {},
+        includeAuth = true,
+    } = options;
+
+    const url = API_CONFIG.getUrl(endpoint);
+
+    // Prepare headers
+    const finalHeaders = {
+        'Content-Type': 'application/json',
+        ...headers,
+    };
+
+    // Prepare request config
+    const requestConfig = {
+        method,
+        headers: finalHeaders,
+        credentials: includeAuth ? 'include' : 'same-origin',
+    };
+
+    if (body && method !== 'GET') {
+        requestConfig.body = JSON.stringify(body);
+    }
+
+    try {
+        const response = await fetch(url, requestConfig);
+        const data = await response.json();
+
+        if (!response.ok) {
+            const error = new Error(data.error || 'API request failed');
+            error.status = response.status;
+            error.data = data;
+            throw error;
+        }
+
+        return data;
+    } catch (error) {
+        // Log error but don't expose sensitive details to user
+        console.error('API request error:', error);
+        throw error;
+    }
+}
+
+// Export for use in other files
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { API_CONFIG, makeApiRequest };
+}
