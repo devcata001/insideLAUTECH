@@ -44,6 +44,39 @@ textarea:focus-visible,
   box-shadow: none !important;
 }
 
+.btn {
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  min-height: 42px;
+  padding: 0.62rem 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.btn-lg {
+  min-height: 48px;
+  padding: 0.78rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 14px;
+}
+
+.btn-sm {
+  min-height: 34px;
+  padding: 0.42rem 0.85rem;
+  font-size: 0.86rem;
+  border-radius: 10px;
+}
+
 section {
   position: relative;
 }
@@ -91,7 +124,7 @@ html {
 
 /* Navigation Bar */
 .navbar {
-  min-height: 112px;
+  min-height: 84px;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
   transition:
     background-color 0.25s ease,
@@ -115,9 +148,9 @@ html {
 }
 
 .brand-logo {
-  height: 104px;
+  height: 70px;
   width: auto;
-  max-width: 620px;
+  max-width: 420px;
   object-fit: contain;
   display: block;
   background: transparent !important;
@@ -131,8 +164,8 @@ html {
 
 .navbar-brand {
   background-color: #ffffff;
-  padding-top: 0.1rem;
-  padding-bottom: 0.1rem;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .footer-brand-logo {
@@ -143,12 +176,12 @@ html {
 
 @media (max-width: 991px) {
   .navbar {
-    min-height: 94px;
+    min-height: 74px;
   }
 
   .brand-logo {
-    height: 82px;
-    max-width: 500px;
+    height: 58px;
+    max-width: 340px;
   }
 
   .footer-brand-logo {
@@ -159,12 +192,12 @@ html {
 
 @media (max-width: 600px) {
   .navbar {
-    min-height: 82px;
+    min-height: 66px;
   }
 
   .brand-logo {
-    height: 68px;
-    max-width: 380px;
+    height: 50px;
+    max-width: 280px;
   }
 
   .footer-brand-logo {
@@ -178,14 +211,15 @@ html {
 }
 
 .navbar-brand:hover img {
-  transform: scale(1.1);
+  transform: scale(1.04);
 }
 
 .nav-link {
   color: var(--brand-dark) !important;
   font-weight: 500;
-  padding: 0.5rem 0.85rem !important;
-  border-radius: 10px;
+  font-size: 0.95rem;
+  padding: 0.35rem 0.65rem !important;
+  border-radius: 8px;
   transition: all 0.3s ease;
   position: relative;
 }
@@ -249,13 +283,16 @@ html {
 .btn-signup {
   background-color: var(--brand-accent) !important;
   color: white !important;
-  border-radius: 25px;
-  padding: 8px 20px !important;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 0.42rem 0.95rem !important;
 }
 
 .btn-signup:hover {
   background-color: var(--brand-accent-strong) !important;
-  transform: translateY(-2px) !important;
+  transform: translateY(-1px) !important;
 }
 
 /* Navbar Responsive Fix */
@@ -269,7 +306,7 @@ html {
   }
 
   .nav-item {
-    margin: 0.5rem 0;
+    margin: 0.25rem 0;
   }
 
   .btn-signup {
@@ -280,9 +317,12 @@ html {
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg,
-      rgba(30, 58, 138, 0.94) 0%,
-      rgba(37, 99, 235, 0.86) 100%);
+  background-image:
+    linear-gradient(115deg, rgba(15, 23, 42, 0.78) 0%, rgba(30, 58, 138, 0.56) 55%, rgba(37, 99, 235, 0.35) 100%),
+    url("../assets/shop.jpeg");
+  background-size: cover;
+  background-position: 50% 28%;
+  background-repeat: no-repeat;
   min-height: 64vh;
   display: flex;
   align-items: center;
@@ -292,9 +332,7 @@ html {
 
 @media (max-width: 991px) {
   .hero-section {
-    background: linear-gradient(135deg,
-        rgba(30, 58, 138, 0.94) 0%,
-        rgba(37, 99, 235, 0.86) 100%);
+    background-position: 50% 22%;
   }
 }
 
@@ -305,19 +343,8 @@ html {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.04);
-  animation: float 20s linear infinite;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.08) 0%, rgba(15, 23, 42, 0.26) 100%);
   pointer-events: none;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0) translateX(0);
-  }
-
-  100% {
-    transform: translateY(-100px) translateX(100px);
-  }
 }
 
 .hero-content {
@@ -343,10 +370,6 @@ html {
 .btn-primary {
   background-color: var(--brand-accent) !important;
   border: none !important;
-  padding: 12px 30px;
-  border-radius: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
   box-shadow: 0 8px 14px rgba(26, 29, 41, 0.14);
 }
 
@@ -358,10 +381,6 @@ html {
 
 .btn-outline-light {
   border: 2px solid white;
-  padding: 12px 30px;
-  border-radius: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
 }
 
 .btn-outline-light:hover {
@@ -523,9 +542,41 @@ html {
 }
 
 .product-card .btn-sm {
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-weight: 600;
+  min-height: 36px;
+  padding: 0.45rem 0.95rem;
+}
+
+.btn-success {
+  background-color: #16a34a !important;
+  border-color: #16a34a !important;
+}
+
+.btn-success:hover {
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+  transform: translateY(-1px);
+}
+
+.btn-outline-secondary,
+.btn-secondary {
+  border-color: #c4d1e2 !important;
+  color: #334155 !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-secondary:hover {
+  background-color: #eef3fa !important;
+  border-color: #b2c3da !important;
+  color: #0f172a !important;
+  transform: translateY(-1px);
+}
+
+.btn-outline-primary:hover {
+  transform: translateY(-1px);
+}
+
+.btn-danger:hover {
+  transform: translateY(-1px);
 }
 
 .order-btn {
@@ -629,10 +680,6 @@ html {
   background-color: var(--brand-accent) !important;
   color: #fff !important;
   border: none !important;
-  padding: 12px 30px;
-  border-radius: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
 }
 
 .btn-warning:hover {
@@ -796,7 +843,8 @@ html {
   }
 
   .btn-lg {
-    padding: 12px 20px;
+    min-height: 44px;
+    padding: 0.68rem 1.15rem;
     font-size: 0.95rem;
   }
 

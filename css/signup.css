@@ -38,6 +38,19 @@ textarea:focus-visible,
   box-shadow: none !important;
 }
 
+.btn {
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  min-height: 44px;
+  padding: 0.7rem 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
 /* Auth Container */
 .auth-container {
   display: flex;
@@ -410,11 +423,11 @@ textarea:focus-visible,
 .btn-auth {
   background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-accent-strong) 100%);
   color: white;
-  padding: 0.875rem 1.5rem;
   border: none;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  min-height: 46px;
+  padding: 0.72rem 1.2rem;
+  border-radius: 12px;
+  font-size: 1rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }
@@ -463,9 +476,9 @@ textarea:focus-visible,
 }
 
 .btn-social {
-  padding: 0.75rem 1.5rem;
-  border-radius: 10px;
-  font-weight: 600;
+  min-height: 44px;
+  padding: 0.68rem 1.1rem;
+  border-radius: 12px;
   transition: all 0.3s ease;
   border: 2px solid var(--border-color);
   background-color: white;
@@ -563,12 +576,14 @@ textarea:focus-visible,
   }
 
   .btn-auth {
-    padding: 0.75rem 1.25rem;
+    min-height: 44px;
+    padding: 0.66rem 1.05rem;
     font-size: 1rem;
   }
 
   .btn-social {
-    padding: 0.625rem 1rem;
+    min-height: 42px;
+    padding: 0.62rem 0.95rem;
     font-size: 0.9rem;
   }
 }
