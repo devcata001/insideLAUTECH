@@ -84,20 +84,21 @@ html {
 
 /* Navigation Bar */
 .navbar {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  min-height: 112px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
   transition:
     background-color 0.25s ease,
     box-shadow 0.25s ease;
 }
 
-.navbar.bg-dark {
-  background-color: var(--navbar-dark-soft) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+.navbar.bg-white {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .navbar.scrolled {
-  background-color: rgba(34, 39, 53, 0.96) !important;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
 }
 
 .navbar-brand .brand-text {
@@ -107,12 +108,24 @@ html {
 }
 
 .brand-logo {
-  height: 90px;
+  height: 104px;
   width: auto;
-  max-width: 420px;
+  max-width: 620px;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.navbar-brand {
+  background-color: #ffffff;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
 }
 
 .footer-brand-logo {
@@ -122,9 +135,13 @@ html {
 }
 
 @media (max-width: 991px) {
+  .navbar {
+    min-height: 94px;
+  }
+
   .brand-logo {
-    height: 64px;
-    max-width: 220px;
+    height: 82px;
+    max-width: 500px;
   }
 
   .footer-brand-logo {
@@ -134,9 +151,13 @@ html {
 }
 
 @media (max-width: 600px) {
+  .navbar {
+    min-height: 82px;
+  }
+
   .brand-logo {
-    height: 48px;
-    max-width: 140px;
+    height: 68px;
+    max-width: 380px;
   }
 
   .footer-brand-logo {
@@ -154,7 +175,7 @@ html {
 }
 
 .nav-link {
-  color: rgba(255, 255, 255, 0.95) !important;
+  color: #1e3a8a !important;
   font-weight: 500;
   padding: 0.5rem 0.85rem !important;
   border-radius: 10px;
@@ -164,7 +185,7 @@ html {
 
 .nav-link:hover {
   color: var(--brand-accent) !important;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(37, 99, 235, 0.08);
   transform: translateY(-1px);
 }
 
