@@ -1,372 +1,325 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - InsideLAUTECH</title>
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://www.clipartmax.com/png/middle/258-2587546_%5Bgood-news%5D-lautech-resumes-on-15th-of-september-and-ladoke-akintola-university.png"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="../css/styles.css" />
-    <style>
-      .dashboard-page {
-        background: #f7f8fa;
-        min-height: 100vh;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - InsideLAUTECH</title>
+  <link rel="icon" type="image/png" href="../assets/logo.png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .dashboard-page {
+      background: #f7f8fa;
+      min-height: 100vh;
+    }
+
+    .dashboard-sidebar,
+    .dashboard-panel,
+    .dashboard-stat {
+      border: 0;
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(17, 24, 39, 0.08);
+      background: #fff;
+    }
+
+    .dashboard-sidebar .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5efe0 0%, #efe2c2 100%);
+      color: #7f642e;
+      margin-bottom: 0.85rem;
+    }
+
+    .dashboard-nav-btn {
+      border: 1px solid #e8ebf0;
+      background: #fff;
+      color: #1a1d29;
+      border-radius: 12px;
+      padding: 0.65rem 0.8rem;
+      text-align: left;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .dashboard-nav-btn:hover {
+      border-color: #d7c291;
+      transform: translateX(3px);
+      color: #7f642e;
+    }
+
+    .dashboard-nav-btn.active {
+      border-color: rgba(192, 160, 98, 0.5);
+      background: rgba(192, 160, 98, 0.12);
+      color: #7f642e;
+    }
+
+    .dashboard-panel .form-control {
+      border-radius: 10px;
+      border: 1px solid #e4e9f0;
+      background: #f9fbfd;
+    }
+
+    .dashboard-stat {
+      overflow: hidden;
+    }
+
+    .dashboard-stat .card-body {
+      padding: 1.25rem;
+    }
+
+    .stat-title {
+      color: #5f6b7a;
+      font-size: 0.92rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-value {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 0;
+      color: #1a1d29;
+    }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .stat-icon.primary {
+      background: rgba(192, 160, 98, 0.2);
+      color: #7f642e;
+    }
+
+    /* Spacing between stat cards */
+    .dashboard-stat {
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 767px) {
+      .dashboard-page .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
       }
 
-      .dashboard-sidebar,
-      .dashboard-panel,
+      /* Extra spacing on mobile */
       .dashboard-stat {
-        border: 0;
-        border-radius: 16px;
-        box-shadow: 0 8px 18px rgba(17, 24, 39, 0.08);
-        background: #fff;
+        margin-bottom: 2rem;
       }
+    }
+  </style>
+</head>
 
-      .dashboard-sidebar .avatar {
-        width: 72px;
-        height: 72px;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #f5efe0 0%, #efe2c2 100%);
-        color: #7f642e;
-        margin-bottom: 0.85rem;
-      }
+<body class="dashboard-page">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+        <img src="../assets/logo.png" alt="InsideLAUTECH logo" class="brand-logo" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="cart.html">
+              <i class="bi bi-cart3"></i> Cart
+              <span id="cartCount" class="badge bg-danger">0</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="dashboardLogoutLink">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-      .dashboard-nav-btn {
-        border: 1px solid #e8ebf0;
-        background: #fff;
-        color: #1a1d29;
-        border-radius: 12px;
-        padding: 0.65rem 0.8rem;
-        text-align: left;
-        font-weight: 600;
-        transition: all 0.25s ease;
-      }
-
-      .dashboard-nav-btn:hover {
-        border-color: #d7c291;
-        transform: translateX(3px);
-        color: #7f642e;
-      }
-
-      .dashboard-nav-btn.active {
-        border-color: rgba(192, 160, 98, 0.5);
-        background: rgba(192, 160, 98, 0.12);
-        color: #7f642e;
-      }
-
-      .dashboard-panel .form-control {
-        border-radius: 10px;
-        border: 1px solid #e4e9f0;
-        background: #f9fbfd;
-      }
-
-      .dashboard-stat {
-        overflow: hidden;
-      }
-
-      .dashboard-stat .card-body {
-        padding: 1.25rem;
-      }
-
-      .stat-title {
-        color: #5f6b7a;
-        font-size: 0.92rem;
-        margin-bottom: 0.2rem;
-      }
-
-      .stat-value {
-        font-size: 1.7rem;
-        font-weight: 700;
-        margin: 0;
-        color: #1a1d29;
-      }
-
-      .stat-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-      }
-
-      .stat-icon.primary {
-        background: rgba(192, 160, 98, 0.2);
-        color: #7f642e;
-      }
-
-      /* Spacing between stat cards */
-      .dashboard-stat {
-        margin-bottom: 1.5rem;
-      }
-
-      @media (max-width: 767px) {
-        .dashboard-page .container {
-          padding-left: 1rem;
-          padding-right: 1rem;
-        }
-
-        /* Extra spacing on mobile */
-        .dashboard-stat {
-          margin-bottom: 2rem;
-        }
-      }
-    </style>
-  </head>
-
-  <body class="dashboard-page">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
-          <img
-            src="../assets/logo.png"
-            alt="InsideLAUTECH logo"
-            class="brand-logo"
-          />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="cart.html">
-                <i class="bi bi-cart3"></i> Cart
-                <span id="cartCount" class="badge bg-danger">0</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" id="dashboardLogoutLink">
-                <i class="bi bi-box-arrow-right"></i> Logout
-              </a>
-            </li>
-          </ul>
+  <div class="container my-5">
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card dashboard-sidebar">
+          <div class="card-body text-center">
+            <div class="avatar mx-auto">
+              <i class="bi bi-person fs-3"></i>
+            </div>
+            <h5 id="userName" class="mb-1">User</h5>
+            <p class="text-muted small mb-3" id="userEmail">
+              email@example.com
+            </p>
+            <hr />
+            <div class="d-grid gap-2">
+              <button class="dashboard-nav-btn active" data-section="profile" onclick="showSection('profile', this)">
+                <i class="bi bi-person"></i> Profile
+              </button>
+              <button class="dashboard-nav-btn" data-section="orders" onclick="showSection('orders', this)">
+                <i class="bi bi-bag"></i> Orders
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
 
-    <div class="container my-5">
-      <div class="row g-4">
-        <div class="col-md-3">
-          <div class="card dashboard-sidebar">
-            <div class="card-body text-center">
-              <div class="avatar mx-auto">
-                <i class="bi bi-person fs-3"></i>
+      <div class="col-md-9">
+        <!-- Profile Section -->
+        <div id="profileSection" class="section-content">
+          <div class="row g-4 mb-4">
+            <div class="col-md-6">
+              <div class="card dashboard-stat h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                  <div>
+                    <p class="stat-title">Total Orders</p>
+                    <p id="totalOrders" class="stat-value">0</p>
+                  </div>
+                  <span class="stat-icon primary"><i class="bi bi-bag-check"></i></span>
+                </div>
               </div>
-              <h5 id="userName" class="mb-1">User</h5>
-              <p class="text-muted small mb-3" id="userEmail">
-                email@example.com
-              </p>
-              <hr />
-              <div class="d-grid gap-2">
-                <button
-                  class="dashboard-nav-btn active"
-                  data-section="profile"
-                  onclick="showSection('profile', this)"
-                >
-                  <i class="bi bi-person"></i> Profile
-                </button>
-                <button
-                  class="dashboard-nav-btn"
-                  data-section="orders"
-                  onclick="showSection('orders', this)"
-                >
-                  <i class="bi bi-bag"></i> Orders
-                </button>
+            </div>
+            <div class="col-md-6">
+              <div class="card dashboard-stat h-100">
+                <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+                  <div>
+                    <p class="stat-title mb-1">Quick Action</p>
+                    <p class="stat-value fs-4 mb-0">Shop Now</p>
+                  </div>
+                  <a href="products.html" class="btn btn-primary">
+                    <i class="bi bi-cart-plus"></i> Shop Now
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card dashboard-panel">
+            <div class="card-body">
+              <h4 class="mb-4">
+                <i class="bi bi-person-circle"></i> Profile Information
+              </h4>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="profileName" readonly />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" id="profileEmail" readonly />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Phone</label>
+                  <input type="text" class="form-control" id="profilePhone" readonly />
+                </div>
+              </div>
+              <div class="alert alert-info" id="memberSince">
+                <i class="bi bi-info-circle"></i> Member since
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-9">
-          <!-- Profile Section -->
-          <div id="profileSection" class="section-content">
-            <div class="row g-4 mb-4">
-              <div class="col-md-6">
-                <div class="card dashboard-stat h-100">
-                  <div
-                    class="card-body d-flex justify-content-between align-items-center"
-                  >
-                    <div>
-                      <p class="stat-title">Total Orders</p>
-                      <p id="totalOrders" class="stat-value">0</p>
-                    </div>
-                    <span class="stat-icon primary"
-                      ><i class="bi bi-bag-check"></i
-                    ></span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="card dashboard-stat h-100">
-                  <div
-                    class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3"
-                  >
-                    <div>
-                      <p class="stat-title mb-1">Quick Action</p>
-                      <p class="stat-value fs-4 mb-0">Shop Now</p>
-                    </div>
-                    <a href="products.html" class="btn btn-primary">
-                      <i class="bi bi-cart-plus"></i> Shop Now
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card dashboard-panel">
-              <div class="card-body">
-                <h4 class="mb-4">
-                  <i class="bi bi-person-circle"></i> Profile Information
-                </h4>
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label class="form-label">Full Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="profileName"
-                      readonly
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Email</label>
-                    <input
-                      type="email"
-                      class="form-control"
-                      id="profileEmail"
-                      readonly
-                    />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label class="form-label">Phone</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="profilePhone"
-                      readonly
-                    />
-                  </div>
-                </div>
-                <div class="alert alert-info" id="memberSince">
-                  <i class="bi bi-info-circle"></i> Member since
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Orders Section -->
-          <div id="ordersSection" class="section-content" style="display: none">
-            <div class="card dashboard-panel">
-              <div class="card-body">
-                <h4 class="mb-4"><i class="bi bi-bag"></i> My Orders</h4>
-                <div id="ordersContainer"></div>
-              </div>
+        <!-- Orders Section -->
+        <div id="ordersSection" class="section-content" style="display: none">
+          <div class="card dashboard-panel">
+            <div class="card-body">
+              <h4 class="mb-4"><i class="bi bi-bag"></i> My Orders</h4>
+              <div id="ordersContainer"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="../data/products-data.js"></script>
-    <script src="../data/price-overrides.js"></script>
-    <script src="../js/main.js"></script>
-    <script>
-      const user = checkSession();
-      if (!user) {
-        showToast("Please login to access dashboard", "warning");
-        window.location.href = "login.html";
-      }
+  <script src="../data/products-data.js"></script>
+  <script src="../data/price-overrides.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    const user = checkSession();
+    if (!user) {
+      showToast("Please login to access dashboard", "warning");
+      window.location.href = "login.html";
+    }
 
-      const dashboardLogoutLink = document.getElementById(
-        "dashboardLogoutLink",
-      );
-      if (dashboardLogoutLink) {
-        dashboardLogoutLink.addEventListener("click", (event) => {
-          event.preventDefault();
-          logout();
-        });
-      }
+    const dashboardLogoutLink = document.getElementById(
+      "dashboardLogoutLink",
+    );
+    if (dashboardLogoutLink) {
+      dashboardLogoutLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        logout();
+      });
+    }
 
-      document.getElementById("userName").textContent = user.name;
-      document.getElementById("userEmail").textContent = user.email;
-      document.getElementById("profileName").value = user.name;
-      document.getElementById("profileEmail").value = user.email;
-      document.getElementById("profilePhone").value =
-        user.phone || "Not provided";
+    document.getElementById("userName").textContent = user.name;
+    document.getElementById("userEmail").textContent = user.email;
+    document.getElementById("profileName").value = user.name;
+    document.getElementById("profileEmail").value = user.email;
+    document.getElementById("profilePhone").value =
+      user.phone || "Not provided";
 
-      const memberSinceDate = user.createdAt
-        ? new Date(user.createdAt)
-        : new Date();
-      document.getElementById("memberSince").innerHTML = `
+    const memberSinceDate = user.createdAt
+      ? new Date(user.createdAt)
+      : new Date();
+    document.getElementById("memberSince").innerHTML = `
             <i class="bi bi-info-circle"></i> Member since ${memberSinceDate.toLocaleDateString()}
         `;
 
-      const updateTotalOrders = () => {
-        const allOrders = JSON.parse(
-          localStorage.getItem("insidelautech_orders") || "[]",
+    const updateTotalOrders = () => {
+      const allOrders = JSON.parse(
+        localStorage.getItem("insidelautech_orders") || "[]",
+      );
+      const userOrders = allOrders
+        .filter((order) => order.userId === user.email)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
-        const userOrders = allOrders
-          .filter((order) => order.userId === user.email)
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          );
-        const totalOrdersElement = document.getElementById("totalOrders");
-        if (totalOrdersElement) {
-          totalOrdersElement.textContent = userOrders.length;
-        }
-      };
+      const totalOrdersElement = document.getElementById("totalOrders");
+      if (totalOrdersElement) {
+        totalOrdersElement.textContent = userOrders.length;
+      }
+    };
 
-      updateTotalOrders();
+    updateTotalOrders();
 
-      const loadUserOrders = () => {
-        const allOrders = JSON.parse(
-          localStorage.getItem("insidelautech_orders") || "[]",
-        );
-        const userOrders = allOrders.filter(
-          (order) => order.userId === user.email,
-        );
-        const ordersContainer = document.getElementById("ordersContainer");
+    const loadUserOrders = () => {
+      const allOrders = JSON.parse(
+        localStorage.getItem("insidelautech_orders") || "[]",
+      );
+      const userOrders = allOrders.filter(
+        (order) => order.userId === user.email,
+      );
+      const ordersContainer = document.getElementById("ordersContainer");
 
-        if (!ordersContainer) return;
+      if (!ordersContainer) return;
 
-        if (userOrders.length === 0) {
-          ordersContainer.innerHTML = `
+      if (userOrders.length === 0) {
+        ordersContainer.innerHTML = `
                     <div class="text-center py-5">
                         <i class="bi bi-bag-x fs-1 text-muted"></i>
                         <p class="text-muted mt-3">No orders yet</p>
                         <a href="products.html" class="btn btn-primary">Start Shopping</a>
                     </div>
                 `;
-          return;
-        }
+        return;
+      }
 
-        ordersContainer.innerHTML = userOrders
-          .map(
-            (order) => `
+      ordersContainer.innerHTML = userOrders
+        .map(
+          (order) => `
                 <div class="card mb-3">
                     <div class="card-header bg-light">
                         <div class="d-flex justify-content-between align-items-center">
@@ -397,22 +350,22 @@
                     </div>
                 </div>
             `,
-          )
-          .join("");
-      };
+        )
+        .join("");
+    };
 
-      const viewReceipt = (orderId) => {
-        const allOrders = JSON.parse(
-          localStorage.getItem("insidelautech_orders") || "[]",
-        );
-        const order = allOrders.find((o) => o.orderId === orderId);
+    const viewReceipt = (orderId) => {
+      const allOrders = JSON.parse(
+        localStorage.getItem("insidelautech_orders") || "[]",
+      );
+      const order = allOrders.find((o) => o.orderId === orderId);
 
-        if (!order) {
-          alert("Order not found");
-          return;
-        }
+      if (!order) {
+        alert("Order not found");
+        return;
+      }
 
-        const receiptHtml = `
+      const receiptHtml = `
                 <div class="card">
                     <div class="card-header bg-dark text-white text-center">
                         <h4 class="mb-0">InsideLAUTECH Receipt</h4>
@@ -424,15 +377,15 @@
                         <h6 class="mb-3">Order Items:</h6>
                         <div class="mb-3">
                             ${order.items
-                              .map(
-                                (item) => `
+          .map(
+            (item) => `
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>${item.name} x${item.quantity}</span>
                                     <strong>₦${(item.price * item.quantity).toLocaleString()}</strong>
                                 </div>
                             `,
-                              )
-                              .join("")}
+          )
+          .join("")}
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between mb-2">
@@ -458,7 +411,7 @@
                 </div>
             `;
 
-        const modalHtml = `
+      const modalHtml = `
                 <div class="modal fade" id="receiptModal" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -480,50 +433,51 @@
                 </div>
             `;
 
-        let modal = document.getElementById("receiptModal");
-        if (modal) {
-          modal.remove();
-        }
+      let modal = document.getElementById("receiptModal");
+      if (modal) {
+        modal.remove();
+      }
 
-        document.body.insertAdjacentHTML("beforeend", modalHtml);
-        modal = new bootstrap.Modal(document.getElementById("receiptModal"));
-        modal.show();
-      };
+      document.body.insertAdjacentHTML("beforeend", modalHtml);
+      modal = new bootstrap.Modal(document.getElementById("receiptModal"));
+      modal.show();
+    };
 
-      const printReceipt = (btn) => {
-        const content = btn.closest(".modal-body").innerHTML;
-        const printWindow = window.open("", "", "height=600,width=800");
-        printWindow.document.write(content);
-        printWindow.document.close();
-        printWindow.print();
-      };
+    const printReceipt = (btn) => {
+      const content = btn.closest(".modal-body").innerHTML;
+      const printWindow = window.open("", "", "height=600,width=800");
+      printWindow.document.write(content);
+      printWindow.document.close();
+      printWindow.print();
+    };
 
-      const showSection = (section) => {
-        document
-          .querySelectorAll(".section-content")
-          .forEach((s) => (s.style.display = "none"));
-        document
-          .querySelectorAll(".dashboard-nav-btn")
-          .forEach((b) => b.classList.remove("active"));
+    const showSection = (section) => {
+      document
+        .querySelectorAll(".section-content")
+        .forEach((s) => (s.style.display = "none"));
+      document
+        .querySelectorAll(".dashboard-nav-btn")
+        .forEach((b) => b.classList.remove("active"));
 
-        if (section === "profile") {
-          document.getElementById("profileSection").style.display = "block";
-        } else if (section === "orders") {
-          document.getElementById("ordersSection").style.display = "block";
-          loadUserOrders();
-        }
+      if (section === "profile") {
+        document.getElementById("profileSection").style.display = "block";
+      } else if (section === "orders") {
+        document.getElementById("ordersSection").style.display = "block";
+        loadUserOrders();
+      }
 
-        const activeBtn = document.querySelector(
-          `.dashboard-nav-btn[data-section="${section}"]`,
-        );
-        if (activeBtn) {
-          activeBtn.classList.add("active");
-        }
-      };
+      const activeBtn = document.querySelector(
+        `.dashboard-nav-btn[data-section="${section}"]`,
+      );
+      if (activeBtn) {
+        activeBtn.classList.add("active");
+      }
+    };
 
-      window.viewReceipt = viewReceipt;
-      window.printReceipt = printReceipt;
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+    window.viewReceipt = viewReceipt;
+    window.printReceipt = printReceipt;
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>

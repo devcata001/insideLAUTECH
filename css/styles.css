@@ -591,6 +591,12 @@ html {
   height: 500px;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 50%;
+  pointer-events: none;
+}
+
+.cta-section .container {
+  position: relative;
+  z-index: 1;
 }
 
 .btn-warning {

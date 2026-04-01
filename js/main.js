@@ -201,11 +201,33 @@ const getCartTotal = () => {
 };
 
 const checkSession = () => {
+  const SESSION_MAX_AGE_MS = 2 * 60 * 60 * 1000;
   const session = localStorage.getItem("insidelautech_session");
   if (session) {
-    const user = JSON.parse(session);
-    if (user.loggedIn) {
+    try {
+      const user = JSON.parse(session);
+      if (!user.loggedIn) {
+        localStorage.removeItem("insidelautech_session");
+        return null;
+      }
+
+      const referenceTime = user.lastLoginAt || user.loginTime;
+      const parsedTime = referenceTime ? new Date(referenceTime).getTime() : NaN;
+
+      if (!Number.isFinite(parsedTime)) {
+        localStorage.removeItem("insidelautech_session");
+        return null;
+      }
+
+      if (Date.now() - parsedTime > SESSION_MAX_AGE_MS) {
+        localStorage.removeItem("insidelautech_session");
+        return null;
+      }
+
       return user;
+    } catch {
+      localStorage.removeItem("insidelautech_session");
+      return null;
     }
   }
   return null;
