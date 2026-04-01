@@ -98,6 +98,11 @@ async function makeApiRequest(endpoint, options = {}) {
     }
 }
 
+if (typeof window !== 'undefined') {
+    window.API_CONFIG = API_CONFIG;
+    window.makeApiRequest = makeApiRequest;
+}
+
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { API_CONFIG, makeApiRequest };
