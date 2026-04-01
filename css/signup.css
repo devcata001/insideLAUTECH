@@ -3,9 +3,13 @@
 /* Custom CSS Variables */
 :root {
   --brand-accent: #2563eb;
+  --brand-accent-strong: #1d4ed8;
   --brand-dark: #1e3a8a;
-  --light-gray: #f8f9fa;
-  --border-color: #dee2e6;
+  --light-gray: #f4f7fb;
+  --surface-soft: #f8fbff;
+  --border-color: #dbe5f1;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
 }
 
 /* Global Styles */
@@ -19,7 +23,8 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
-  background: #f6f7fb;
+  background: var(--light-gray);
+  color: var(--text-primary);
 }
 
 a:focus-visible,
@@ -159,10 +164,10 @@ textarea:focus-visible,
   width: 100%;
   max-width: 520px;
   background: #fff;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 12px 30px rgba(26, 29, 41, 0.08);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
   animation: fadeIn 0.8s ease-out;
 }
 
@@ -208,7 +213,7 @@ textarea:focus-visible,
 }
 
 .form-subtitle {
-  color: #6c757d;
+  color: var(--text-muted);
   margin-bottom: 2rem;
 }
 
@@ -217,7 +222,7 @@ textarea:focus-visible,
   align-items: center;
   gap: 0.5rem;
   background: rgba(37, 99, 235, 0.14);
-  color: #1e40af;
+  color: var(--brand-accent-strong);
   border: 1px solid rgba(37, 99, 235, 0.42);
   border-radius: 999px;
   padding: 0.4rem 0.8rem;
@@ -255,7 +260,7 @@ textarea:focus-visible,
   position: absolute;
   left: 15px;
   z-index: 10;
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 1.1rem;
 }
 
@@ -263,7 +268,7 @@ textarea:focus-visible,
   position: absolute;
   right: 15px;
   z-index: 10;
-  color: #6c757d;
+  color: var(--text-muted);
   cursor: pointer;
   font-size: 1.1rem;
   transition: color 0.3s ease;
@@ -344,7 +349,7 @@ textarea:focus-visible,
 .password-rules li {
   font-size: 0.83rem;
   margin-bottom: 0.2rem;
-  color: #6c757d;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -355,8 +360,8 @@ textarea:focus-visible,
 }
 
 .auth-helper {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
+  background: var(--surface-soft);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 0.75rem 0.85rem;
   font-size: 0.88rem;
@@ -397,13 +402,13 @@ textarea:focus-visible,
 }
 
 .forgot-password:hover {
-  color: #1d4ed8;
+  color: var(--brand-accent-strong);
   text-decoration: underline;
 }
 
 /* Submit Button */
 .btn-auth {
-  background: linear-gradient(135deg, var(--brand-accent) 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-accent-strong) 100%);
   color: white;
   padding: 0.875rem 1.5rem;
   border: none;
@@ -417,7 +422,7 @@ textarea:focus-visible,
 .btn-auth:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-  background: linear-gradient(135deg, #1d4ed8 0%, var(--brand-accent) 100%);
+  background: linear-gradient(135deg, var(--brand-accent-strong) 0%, var(--brand-accent) 100%);
 }
 
 .btn-auth:active {
@@ -444,7 +449,7 @@ textarea:focus-visible,
 .divider span {
   background-color: white;
   padding: 0 1rem;
-  color: #6c757d;
+  color: var(--text-muted);
   font-weight: 600;
   position: relative;
   z-index: 1;
@@ -473,20 +478,20 @@ textarea:focus-visible,
 }
 
 .btn-google:hover {
-  background-color: #f8f9fa;
-  border-color: #dc4e41;
-  color: #dc4e41;
+  background-color: var(--surface-soft);
+  border-color: var(--brand-accent);
+  color: var(--brand-dark);
 }
 
 .btn-facebook:hover {
-  background-color: #f8f9fa;
-  border-color: #3b5998;
-  color: #3b5998;
+  background-color: var(--surface-soft);
+  border-color: var(--brand-accent);
+  color: var(--brand-dark);
 }
 
 /* Sign Up/Sign In Link */
 .signup-text {
-  color: #6c757d;
+  color: var(--text-muted);
   margin-bottom: 0;
 }
 
@@ -498,7 +503,7 @@ textarea:focus-visible,
 }
 
 .signup-link:hover {
-  color: #1d4ed8;
+  color: var(--brand-accent-strong);
   text-decoration: underline;
 }
 
@@ -514,7 +519,7 @@ textarea:focus-visible,
 
 /* Back to Home Link */
 .back-home {
-  color: #6c757d;
+  color: var(--text-muted);
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -591,7 +596,7 @@ textarea:focus-visible,
 
 /* Hover Effects */
 .form-control:hover {
-  border-color: #adb5bd;
+  border-color: #b9c9dd;
 }
 
 .form-check-input:hover {
