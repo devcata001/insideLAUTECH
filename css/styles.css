@@ -10,6 +10,7 @@
   --border-soft: #dbe5f1;
   --text-primary: #0f172a;
   --text-muted: #64748b;
+  --btn-primary-height: 46px;
   --section-space: 4.5rem;
   --light-blue: #e8f0ff;
   --light-green: #e9f6ff;
@@ -75,6 +76,17 @@ textarea:focus-visible,
   padding: 0.42rem 0.85rem;
   font-size: 0.86rem;
   border-radius: 10px;
+}
+
+.btn-primary,
+.btn-success,
+.btn-warning,
+.order-btn,
+.add-to-cart-btn,
+#addToCartBtn,
+#productsCtaLink,
+button[data-action="remove"] {
+  min-height: var(--btn-primary-height) !important;
 }
 
 section {

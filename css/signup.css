@@ -576,7 +576,7 @@ textarea:focus-visible,
   }
 
   .btn-auth {
-    min-height: 44px;
+    min-height: 46px;
     padding: 0.66rem 1.05rem;
     font-size: 1rem;
   }
