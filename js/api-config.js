@@ -16,7 +16,7 @@ const API_CONFIG = {
     // Use HTTPS in production
     baseURL: isDevelopment
         ? 'http://localhost:5000'
-        : 'https://api.insidelautech.com', // Update with your production domain
+        : 'https://insidelautech.onrender.com',
 
     // API endpoints
     endpoints: {
@@ -72,7 +72,7 @@ async function makeApiRequest(endpoint, options = {}) {
     const requestConfig = {
         method,
         headers: finalHeaders,
-        credentials: includeAuth ? 'include' : 'same-origin',
+        credentials: 'include',
     };
 
     if (body && method !== 'GET') {
