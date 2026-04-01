@@ -126,10 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (forgotPasswordLink) {
         forgotPasswordLink.addEventListener("click", (event) => {
             event.preventDefault();
-            showToast(
-                "Use your registered password for now. Reset flow can be added next.",
-                "info",
-            );
+            window.location.href = "forgot-password.html";
         });
     }
 

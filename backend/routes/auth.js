@@ -13,6 +13,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Verify transporter connection and log the result
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("[CRITICAL] Email service verification failed:", error.message);
+    console.error("[CRITICAL] Gmail Credentials Issue - Check EMAIL_USER and EMAIL_APP_PASSWORD in .env");
+  } else {
+    console.log("[SUCCESS] Email service is ready and operational");
+  }
+});
+
 const isHostedEnvironment =
   Boolean(process.env.RENDER) || Boolean(process.env.RENDER_EXTERNAL_URL);
 
@@ -40,12 +50,20 @@ const buildVerificationEmailHtml = (name, verifyUrl) => `
 `;
 
 const sendVerificationEmail = async ({ email, name, verifyUrl }) => {
-  await transporter.sendMail({
-    from: `"ShopOnCampus" <${process.env.EMAIL_USER}>`,
-    to: email,
-    subject: "Verify your ShopOnCampus account",
-    html: buildVerificationEmailHtml(name, verifyUrl),
-  });
+  try {
+    await transporter.sendMail({
+      from: `"ShopOnCampus" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Verify your ShopOnCampus account",
+      html: buildVerificationEmailHtml(name, verifyUrl),
+    });
+    console.log(`[SUCCESS] Verification email sent to ${email}`);
+  } catch (error) {
+    console.error(`[ERROR] Failed to send verification email to ${email}:`, error.message);
+    console.error("[DEBUG] Error code:", error.code);
+    console.error("[DEBUG] Response:", error.response);
+    throw error;
+  }
 };
 
 const validateEmail = (email) => {
@@ -347,6 +365,136 @@ router.get("/me", auth, async (req, res) => {
   } catch (err) {
     console.error("Error fetching user:", err);
     res.status(500).json({ error: "Failed to fetch user information" });
+  }
+});
+
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    if (!validateEmail(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      // Security: Don't reveal if email exists
+      return res.status(200).json({
+        message: "If the email exists in our system, a password reset link will be sent.",
+      });
+    }
+
+    // Generate reset token
+    const resetToken = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // Save token and expiry to user
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    await user.save();
+
+    const resetUrl = `${frontendUrl}/pages/reset-password.html?token=${encodeURIComponent(resetToken)}`;
+
+    try {
+      await transporter.sendMail({
+        from: `"ShopOnCampus" <${process.env.EMAIL_USER}>`,
+        to: email.toLowerCase(),
+        subject: "Reset your ShopOnCampus password",
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937;">
+            <h2 style="margin-bottom: 8px;">Hello ${user.name},</h2>
+            <p style="margin: 0 0 16px;">We received a request to reset your ShopOnCampus password. Click the link below to proceed:</p>
+            <a
+              href="${resetUrl}"
+              style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600;"
+            >
+              Reset Password
+            </a>
+            <p style="margin: 16px 0 0; font-size: 14px; color: #6b7280;">This link expires in 1 hour.</p>
+            <p style="margin: 12px 0 0; font-size: 13px; color: #6b7280;">If the button doesn't work, use this backup link:</p>
+            <p style="margin: 4px 0 0; font-size: 13px;"><a href="${resetUrl}">Open password reset link</a></p>
+            <p style="margin: 16px 0 0; font-size: 12px; color: #9ca3af;">If you didn't request a password reset, please ignore this email.</p>
+          </div>
+        `,
+      });
+      console.log(`[SUCCESS] Password reset email sent to ${email.toLowerCase()}`);
+    } catch (emailErr) {
+      console.error(`[ERROR] Failed to send password reset email to ${email.toLowerCase()}:`, emailErr.message);
+      user.resetToken = null;
+      user.resetTokenExpiry = null;
+      await user.save();
+      return res.status(500).json({
+        error: "Failed to send password reset email. Please try again.",
+      });
+    }
+
+    res.json({
+      message: "If the email exists in our system, a password reset link will be sent.",
+    });
+  } catch (err) {
+    console.error("Forgot password error:", err);
+    res.status(500).json({
+      error: "Failed to process password reset request.",
+    });
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ error: "Token and password are required" });
+    }
+
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        error: "Password must use standard characters and be 8-128 chars.",
+      });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (jwtErr) {
+      return res.status(400).json({
+        error: "Invalid or expired password reset link",
+      });
+    }
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (user.resetToken !== token || !user.resetTokenExpiry || new Date() > user.resetTokenExpiry) {
+      return res.status(400).json({
+        error: "Password reset link has expired. Please request a new one.",
+      });
+    }
+
+    // Hash new password
+    const hashed = await bcrypt.hash(password, 12);
+    user.password = hashed;
+    user.resetToken = null;
+    user.resetTokenExpiry = null;
+    await user.save();
+
+    res.json({
+      message: "Password reset successfully. You can now log in with your new password.",
+    });
+  } catch (err) {
+    console.error("Reset password error:", err);
+    res.status(500).json({
+      error: "Failed to reset password. Please try again.",
+    });
   }
 });
 

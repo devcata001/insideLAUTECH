@@ -26,6 +26,8 @@ const API_CONFIG = {
             logout: '/api/auth/logout',
             verify: '/api/auth/verify',
             resendVerification: '/api/auth/resend-verification',
+            forgotPassword: '/api/auth/forgot-password',
+            resetPassword: '/api/auth/reset-password',
             me: '/api/auth/me',
         },
         products: {
