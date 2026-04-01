@@ -87,7 +87,7 @@ generateDeliveryCode();
 1. User completes payment via Paystack ✓
 2. `onSuccess` callback triggers ✓
 3. Immediately calls `createOrder()` ✓
-4. Order stored in localStorage['insidelautech_orders'] ✓
+4. Order stored in localStorage['shoponcampus_orders'] ✓
 5. Cart cleared ✓
 6. User redirected to dashboard ✓
 7. Dashboard displays updated Total Orders count ✓
@@ -113,7 +113,7 @@ onSuccess: (response) => {
   );
 
   cart = [];
-  localStorage.setItem("insidelautech_cart", JSON.stringify(cart));
+  localStorage.setItem("shoponcampus_cart", JSON.stringify(cart));
   updateCartCount();
   renderCart();
   setTimeout(() => {
@@ -171,7 +171,7 @@ View Receipt Button
 **Receipt Format**:
 
 ```
-InsideLAUTECH Receipt
+ShopOnCampus Receipt
 ─────────────────────
 Order #ORD-1711810231234
 Date: March 30, 2026
@@ -274,7 +274,7 @@ Order = {
 
 ### Storage Location
 
-- **Key**: `localStorage['insidelautech_orders']`
+- **Key**: `localStorage['shoponcampus_orders']`
 - **Format**: JSON array of order objects
 - **Persistence**: Survives page refresh, even browser restart
 - **Scope**: All orders for all users (filtered by email on display)

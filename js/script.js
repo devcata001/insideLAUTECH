@@ -1,6 +1,6 @@
 let allUsers = [];
-if (localStorage.insidelautechUsers) {
-  allUsers = JSON.parse(localStorage.getItem("insidelautechUsers"));
+if (localStorage.shoponcampusUsers) {
+  allUsers = JSON.parse(localStorage.getItem("shoponcampusUsers"));
 }
 
 const updateConfirmPasswordHint = (

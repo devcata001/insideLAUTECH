@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const MAX_LOGIN_ATTEMPTS = 5;
     const LOCKOUT_MINUTES = 2;
-    const ATTEMPT_KEY = "insidelautech_login_attempts";
+    const ATTEMPT_KEY = "shoponcampus_login_attempts";
 
     const activeSession = checkSession();
     if (activeSession) {
@@ -116,8 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const remembered =
-        localStorage.getItem("insidelautech_remembered_email") ||
-        localStorage.getItem("insideLAUTECH_rememberedEmail");
+        localStorage.getItem("shoponcampus_remembered_email") ||
+        localStorage.getItem("shoponcampus_rememberedEmail");
     if (remembered) {
         emailInput.value = remembered;
         rememberMe.checked = true;
@@ -200,14 +200,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 loginTime: new Date().toISOString(),
                 lastLoginAt: new Date().toISOString(),
             };
-            localStorage.setItem("insidelautech_session", JSON.stringify(session));
+            localStorage.setItem("shoponcampus_session", JSON.stringify(session));
 
             if (rememberMe.checked) {
-                localStorage.setItem("insidelautech_remembered_email", normalizedEmail);
-                localStorage.removeItem("insideLAUTECH_rememberedEmail");
+                localStorage.setItem("shoponcampus_remembered_email", normalizedEmail);
+                localStorage.removeItem("shoponcampus_rememberedEmail");
             } else {
-                localStorage.removeItem("insidelautech_remembered_email");
-                localStorage.removeItem("insideLAUTECH_rememberedEmail");
+                localStorage.removeItem("shoponcampus_remembered_email");
+                localStorage.removeItem("shoponcampus_rememberedEmail");
             }
 
             showToast("Login successful! Welcome back.", "success");

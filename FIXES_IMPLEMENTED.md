@@ -70,7 +70,7 @@ const code = Math.floor(Math.random() * 10000).padStart(4, "0");
 - Creates order object with all details
 - Generates unique order ID: `ORD-{timestamp}`
 - Generates random 4-digit delivery code
-- Stores order in localStorage under `insidelautech_orders`
+- Stores order in localStorage under `shoponcampus_orders`
 - Returns the created order
 
 ### Integration in Cart
@@ -211,7 +211,7 @@ const generateDeliveryCode = () => {
 
 ### LocalStorage Keys
 
-- `insidelautech_orders` - Array of all orders in system
+- `shoponcampus_orders` - Array of all orders in system
 - Filtered by user email at runtime on dashboard
 
 ---
@@ -260,7 +260,7 @@ const generateDeliveryCode = () => {
 
 ## Notes
 
-- All data stored in localStorage (localStorage['insidelautech_orders'])
+- All data stored in localStorage (localStorage['shoponcampus_orders'])
 - Delivery codes are randomly generated (0000-9999, format with leading zeros)
 - Orders are tied to user email for privacy
 - Receipt printing opens new window for better formatting

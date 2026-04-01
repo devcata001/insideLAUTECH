@@ -266,7 +266,7 @@ window.INSIDE_PRODUCTS = [
 
   {
     id: 27,
-    name: "LAUTECH Hoodie",
+    name: "ShopOnCampus Hoodie",
     category: "fashion",
     price: 18500,
     image:

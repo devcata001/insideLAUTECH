@@ -10,7 +10,7 @@ function auth(req, res, next) {
   const bearerToken = header && header.startsWith("Bearer ")
     ? header.split(" ")[1]
     : null;
-  const cookieToken = req.cookies?.insidelautech_auth;
+  const cookieToken = req.cookies?.shoponcampus_auth;
   const token = bearerToken || cookieToken;
 
   if (!token) {

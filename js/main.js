@@ -1,10 +1,10 @@
 let cart = [];
-if (localStorage.insidelautech_cart) {
-  cart = JSON.parse(localStorage.getItem("insidelautech_cart"));
+if (localStorage.shoponcampus_cart) {
+  cart = JSON.parse(localStorage.getItem("shoponcampus_cart"));
 }
 
 const PAYSTACK_PUBLIC_KEY =
-  localStorage.getItem("insidelautech_paystack_test_key") ||
+  localStorage.getItem("shoponcampus_paystack_test_key") ||
   "pk_test_f56cc9f27a927af6dadbc4653123594a385a3624";
 
 const ensurePaystackScript = (() => {
@@ -161,7 +161,7 @@ const addToCart = (product) => {
     cart.push(newItem);
   }
 
-  localStorage.setItem("insidelautech_cart", JSON.stringify(cart));
+  localStorage.setItem("shoponcampus_cart", JSON.stringify(cart));
   updateCartCount();
   showToast(`${product.name} added to cart`, "success");
 };
@@ -174,7 +174,7 @@ const removeFromCart = (productId) => {
     }
   }
   cart = newCart;
-  localStorage.setItem("insidelautech_cart", JSON.stringify(cart));
+  localStorage.setItem("shoponcampus_cart", JSON.stringify(cart));
   updateCartCount();
 };
 
@@ -185,7 +185,7 @@ const updateQuantity = (productId, newQuantity) => {
         removeFromCart(productId);
       } else {
         cart[i].quantity = newQuantity;
-        localStorage.setItem("insidelautech_cart", JSON.stringify(cart));
+        localStorage.setItem("shoponcampus_cart", JSON.stringify(cart));
       }
       break;
     }
@@ -202,12 +202,12 @@ const getCartTotal = () => {
 
 const checkSession = () => {
   const SESSION_MAX_AGE_MS = 2 * 60 * 60 * 1000;
-  const session = localStorage.getItem("insidelautech_session");
+  const session = localStorage.getItem("shoponcampus_session");
   if (session) {
     try {
       const user = JSON.parse(session);
       if (!user.loggedIn) {
-        localStorage.removeItem("insidelautech_session");
+        localStorage.removeItem("shoponcampus_session");
         return null;
       }
 
@@ -215,18 +215,18 @@ const checkSession = () => {
       const parsedTime = referenceTime ? new Date(referenceTime).getTime() : NaN;
 
       if (!Number.isFinite(parsedTime)) {
-        localStorage.removeItem("insidelautech_session");
+        localStorage.removeItem("shoponcampus_session");
         return null;
       }
 
       if (Date.now() - parsedTime > SESSION_MAX_AGE_MS) {
-        localStorage.removeItem("insidelautech_session");
+        localStorage.removeItem("shoponcampus_session");
         return null;
       }
 
       return user;
     } catch {
-      localStorage.removeItem("insidelautech_session");
+      localStorage.removeItem("shoponcampus_session");
       return null;
     }
   }
@@ -263,7 +263,7 @@ const generateDeliveryCode = () => {
 
 const createOrder = (items, total, userId, userName, userEmail, paymentRef) => {
   const orders = JSON.parse(
-    localStorage.getItem("insidelautech_orders") || "[]",
+    localStorage.getItem("shoponcampus_orders") || "[]",
   );
   const newOrder = {
     orderId: `ORD-${Date.now()}`,
@@ -285,7 +285,7 @@ const createOrder = (items, total, userId, userName, userEmail, paymentRef) => {
   };
 
   orders.push(newOrder);
-  localStorage.setItem("insidelautech_orders", JSON.stringify(orders));
+  localStorage.setItem("shoponcampus_orders", JSON.stringify(orders));
   return newOrder;
 };
 
@@ -356,7 +356,7 @@ const setPaystackTestKey = (publicKey) => {
     showToast("Use a valid Paystack test public key (pk_test_...)", "warning");
     return;
   }
-  localStorage.setItem("insidelautech_paystack_test_key", publicKey);
+  localStorage.setItem("shoponcampus_paystack_test_key", publicKey);
   showToast("Paystack test key saved. Refresh to use it.", "success");
 };
 
@@ -364,7 +364,7 @@ const getFallbackImage = (label = "Product", width = 300, height = 200) => {
   const safeLabel = String(label)
     .slice(0, 42)
     .replace(/[<>&"']/g, "");
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}'><defs><linearGradient id='bg' x1='0' x2='1' y1='0' y2='1'><stop offset='0%' stop-color='#f5efe0'/><stop offset='100%' stop-color='#efe2c2'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#bg)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#7f642e' font-size='16' font-family='Segoe UI, Arial, sans-serif'>${safeLabel}</text></svg>`;
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}'><defs><linearGradient id='bg' x1='0' x2='1' y1='0' y2='1'><stop offset='0%' stop-color='#eff6ff'/><stop offset='100%' stop-color='#bfdbfe'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#bg)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#1e40af' font-size='16' font-family='Segoe UI, Arial, sans-serif'>${safeLabel}</text></svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 };
 

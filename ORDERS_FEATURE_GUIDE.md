@@ -79,7 +79,7 @@ User → Signup → Login → Browse Products →
 ### Storage
 
 - All data in browser localStorage
-- Key: `insidelautech_orders`
+- Key: `shoponcampus_orders`
 - No server required
 - Data persists across sessions
 
@@ -119,16 +119,16 @@ User → Signup → Login → Browse Products →
 
 ```javascript
 // View all orders
-JSON.parse(localStorage.getItem("insidelautech_orders"));
+JSON.parse(localStorage.getItem("shoponcampus_orders"));
 
 // View all users
-JSON.parse(localStorage.getItem("insidelautechUsers"));
+JSON.parse(localStorage.getItem("shoponcampusUsers"));
 
 // View current cart
-JSON.parse(localStorage.getItem("insidelautech_cart"));
+JSON.parse(localStorage.getItem("shoponcampus_cart"));
 
 // Clear orders (for testing)
-localStorage.removeItem("insidelautech_orders");
+localStorage.removeItem("shoponcampus_orders");
 ```
 
 ---

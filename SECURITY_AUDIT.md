@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This document outlines security vulnerabilities found and improvements implemented in the InsideLAUTECH application.
+This document outlines security vulnerabilities found and improvements implemented in the ShopOnCampus application.
 
 ---
 
@@ -264,7 +264,7 @@ Recommended tools:
 If you find security vulnerabilities:
 
 1. DO NOT disclose publicly
-2. Contact: security@insidelautech.com
+2. Contact: security@shoponcampus.com
 3. Allow 30 days for fix before disclosure
 
 ---

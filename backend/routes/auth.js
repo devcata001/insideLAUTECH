@@ -8,7 +8,7 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER || "insidelautechadmin@gmail.com",
+    user: process.env.EMAIL_USER || "shoponcampusadmin@gmail.com",
     pass: process.env.EMAIL_APP_PASSWORD,
   },
 });
@@ -17,7 +17,7 @@ const isHostedEnvironment =
   Boolean(process.env.RENDER) || Boolean(process.env.RENDER_EXTERNAL_URL);
 
 const frontendUrl = isHostedEnvironment
-  ? process.env.FRONTEND_URL || "https://insidelautech.vercel.app"
+  ? process.env.FRONTEND_URL || "https://shoponcampus.vercel.app"
   : process.env.FRONTEND_URL_DEV ||
   process.env.FRONTEND_URL ||
   "http://localhost:3000";
@@ -26,10 +26,10 @@ const isProduction = process.env.NODE_ENV === "production";
 const buildVerificationEmailHtml = (name, verifyUrl) => `
   <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937;">
     <h2 style="margin-bottom: 8px;">Hello ${name},</h2>
-    <p style="margin: 0 0 16px;">Please verify your InsideLAUTECH account to continue.</p>
+    <p style="margin: 0 0 16px;">Please verify your ShopOnCampus account to continue.</p>
     <a
       href="${verifyUrl}"
-      style="display: inline-block; background: #c0a062; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600;"
+      style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600;"
     >
       Verify Email
     </a>
@@ -41,9 +41,9 @@ const buildVerificationEmailHtml = (name, verifyUrl) => `
 
 const sendVerificationEmail = async ({ email, name, verifyUrl }) => {
   await transporter.sendMail({
-    from: `"InsideLAUTECH" <${process.env.EMAIL_USER}>`,
+    from: `"ShopOnCampus" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: "Verify your InsideLAUTECH account",
+    subject: "Verify your ShopOnCampus account",
     html: buildVerificationEmailHtml(name, verifyUrl),
   });
 };
@@ -233,7 +233,7 @@ router.post("/login", async (req, res) => {
       { expiresIn: "2h" }
     );
 
-    res.cookie("insidelautech_auth", token, {
+    res.cookie("shoponcampus_auth", token, {
       httpOnly: true,
       secure: isProduction,
       sameSite: "lax",
@@ -251,7 +251,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  res.clearCookie("insidelautech_auth", {
+  res.clearCookie("shoponcampus_auth", {
     httpOnly: true,
     secure: isProduction,
     sameSite: "lax",
@@ -321,7 +321,7 @@ function auth(req, res, next) {
   const bearerToken = header && header.startsWith("Bearer ")
     ? header.split(" ")[1]
     : null;
-  const cookieToken = req.cookies?.insidelautech_auth;
+  const cookieToken = req.cookies?.shoponcampus_auth;
   const token = bearerToken || cookieToken;
 
   if (!token) {

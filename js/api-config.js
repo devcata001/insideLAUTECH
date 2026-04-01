@@ -16,7 +16,7 @@ const API_CONFIG = {
     // Use HTTPS in production
     baseURL: isDevelopment
         ? 'http://localhost:5000'
-        : 'https://insidelautech.onrender.com',
+        : 'https://shoponcampus.onrender.com',
 
     // API endpoints
     endpoints: {
