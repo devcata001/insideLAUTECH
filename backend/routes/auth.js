@@ -4,70 +4,86 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 
 /**
- * Email transporter setup with fallback for Render
- * Render blocks SMTP on port 587/465 by default
- * This setup attempts standard SMTP first, then falls back to OAuth2
+ * Email transporter setup (Nodemailer SMTP only)
  */
 let transporter;
+let emailProvider = "none";
 
 const isHostedEnvironment =
   Boolean(process.env.RENDER) || Boolean(process.env.RENDER_EXTERNAL_URL);
 
-// Primary: Standard SMTP (works on localhost)
 const createSmtpTransporter = () => {
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_APP_PASSWORD,
-    },
-  });
-};
-
-// Fallback: OAuth2 (works on Render without port restrictions)
-const createOAuth2Transporter = () => {
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      type: "OAuth2",
-      user: process.env.EMAIL_USER,
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-      accessToken: process.env.GOOGLE_ACCESS_TOKEN,
-    },
-  });
-};
-
-// Initialize transporter
-transporter = createSmtpTransporter();
-
-// Verify transporter connection and log the result
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("[WARNING] SMTP Email service verification failed:", error.message);
-    console.warn("[INFO] SMTP may be blocked on this platform. Standard setup is for localhost.");
-
-    if (isHostedEnvironment && process.env.GOOGLE_CLIENT_ID) {
-      console.log("[INFO] Attempting OAuth2 fallback for Render...");
-      transporter = createOAuth2Transporter();
-      transporter.verify((oauthError, oauthSuccess) => {
-        if (oauthError) {
-          console.error("[ERROR] OAuth2 Email service also failed:", oauthError.message);
-        } else {
-          console.log("[SUCCESS] Email service ready via OAuth2 (Render compatible)");
-        }
-      });
-    } else if (isHostedEnvironment) {
-      console.error("[CRITICAL] Running on Render but OAuth2 credentials missing!");
-      console.error("[FIX] Add GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN to .env");
-    }
-  } else {
-    console.log("[SUCCESS] Email service is ready and operational (SMTP)");
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    return null;
   }
-});
+
+  const host = process.env.EMAIL_HOST;
+  const port = Number(process.env.EMAIL_PORT || 0);
+  const secure = String(process.env.EMAIL_SECURE || "false").toLowerCase() === "true";
+
+  if (host) {
+    return nodemailer.createTransport({
+      host,
+      port: port || (secure ? 465 : 587),
+      secure,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+  }
+
+  return nodemailer.createTransport({
+    service: process.env.EMAIL_PROVIDER || "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+};
+
+const initializeEmailService = () => {
+  const candidate = createSmtpTransporter();
+  emailProvider = candidate ? "smtp" : "none";
+
+  if (!candidate) {
+    logEmailSetupError();
+    return;
+  }
+
+  transporter = candidate;
+
+  transporter.verify((error) => {
+    if (error) {
+      console.error(
+        `[CRITICAL] ${emailProvider.toUpperCase()} email verification failed:`,
+        error.message,
+      );
+      transporter = null;
+      emailProvider = "none";
+      return;
+    }
+
+    console.log(`[SUCCESS] Email service ready via ${emailProvider.toUpperCase()}`);
+  });
+};
+
+const logEmailSetupError = () => {
+  console.error("\n[CRITICAL] Nodemailer email is not configured.");
+  console.error("Set these variables in your .env or deployment environment:\n");
+
+  console.error("SMTP mode:");
+  console.error("  EMAIL_SERVICE=smtp");
+  console.error("  EMAIL_USER=shoponcampus@gmail.com");
+  console.error("  EMAIL_PASS=your_gmail_app_password");
+  console.error("  EMAIL_PROVIDER=gmail (optional)\n");
+  console.error("See EMAIL_SETUP.md for detailed instructions.\n");
+};
+
+initializeEmailService();
 
 const frontendUrl = isHostedEnvironment
   ? process.env.FRONTEND_URL || "https://shoponcampus.vercel.app"
@@ -75,6 +91,24 @@ const frontendUrl = isHostedEnvironment
   process.env.FRONTEND_URL ||
   "http://localhost:3000";
 const isProduction = process.env.NODE_ENV === "production";
+
+const getSenderEmail = () => {
+  return process.env.EMAIL_USER || "shoponcampus@gmail.com";
+};
+
+const sendEmail = async ({ to, subject, html }) => {
+  if (!transporter) {
+    throw new Error("Email service is unavailable. Please check provider configuration.");
+  }
+
+  await transporter.sendMail({
+    from: `"ShopOnCampus" <${getSenderEmail()}>`,
+    to,
+    subject,
+    html,
+  });
+};
+
 
 const buildVerificationEmailHtml = (name, verifyUrl) => `
   <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937;">
@@ -94,13 +128,12 @@ const buildVerificationEmailHtml = (name, verifyUrl) => `
 
 const sendVerificationEmail = async ({ email, name, verifyUrl }) => {
   try {
-    await transporter.sendMail({
-      from: `"ShopOnCampus" <${process.env.EMAIL_USER}>`,
+    await sendEmail({
       to: email,
       subject: "Verify your ShopOnCampus account",
       html: buildVerificationEmailHtml(name, verifyUrl),
     });
-    console.log(`[SUCCESS] Verification email sent to ${email}`);
+    console.log(`[SUCCESS] Verification email sent to ${email} via ${emailProvider}`);
   } catch (error) {
     console.error(`[ERROR] Failed to send verification email to ${email}:`, error.message);
     console.error("[DEBUG] Error code:", error.code);
@@ -125,6 +158,23 @@ const validatePassword = (password) => {
 };
 
 const containsEmoji = (value) => /\p{Extended_Pictographic}/u.test(value);
+
+const buildPasswordResetEmailHtml = (name, resetUrl) => `
+  <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937;">
+    <h2 style="margin-bottom: 8px;">Hello ${name},</h2>
+    <p style="margin: 0 0 16px;">We received a request to reset your ShopOnCampus password. Click the link below to proceed:</p>
+    <a
+      href="${resetUrl}"
+      style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600;"
+    >
+      Reset Password
+    </a>
+    <p style="margin: 16px 0 0; font-size: 14px; color: #6b7280;">This link expires in 1 hour.</p>
+    <p style="margin: 12px 0 0; font-size: 13px; color: #6b7280;">If the button doesn't work, use this backup link:</p>
+    <p style="margin: 4px 0 0; font-size: 13px;"><a href="${resetUrl}">Open password reset link</a></p>
+    <p style="margin: 16px 0 0; font-size: 12px; color: #9ca3af;">If you didn't request a password reset, please ignore this email.</p>
+  </div>
+`;
 
 router.post("/signup", async (req, res) => {
   try {
@@ -414,16 +464,21 @@ router.get("/me", auth, async (req, res) => {
 router.post("/forgot-password", async (req, res) => {
   try {
     const { email } = req.body;
+    const normalizedEmail = String(email || "").trim().toLowerCase();
 
-    if (!email) {
+    if (!normalizedEmail) {
       return res.status(400).json({ error: "Email is required" });
     }
 
-    if (!validateEmail(email)) {
+    if (containsEmoji(normalizedEmail)) {
+      return res.status(400).json({ error: "Emojis are not allowed in email." });
+    }
+
+    if (!validateEmail(normalizedEmail)) {
       return res.status(400).json({ error: "Invalid email format" });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       // Security: Don't reveal if email exists
       return res.status(200).json({
@@ -431,45 +486,27 @@ router.post("/forgot-password", async (req, res) => {
       });
     }
 
-    // Generate reset token
-    const resetToken = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenHash = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
 
-    // Save token and expiry to user
-    user.resetToken = resetToken;
-    user.resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    user.resetToken = resetTokenHash;
+    user.resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000);
     await user.save();
 
     const resetUrl = `${frontendUrl}/pages/reset-password.html?token=${encodeURIComponent(resetToken)}`;
 
     try {
-      await transporter.sendMail({
-        from: `"ShopOnCampus" <${process.env.EMAIL_USER}>`,
-        to: email.toLowerCase(),
+      await sendEmail({
+        to: normalizedEmail,
         subject: "Reset your ShopOnCampus password",
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937;">
-            <h2 style="margin-bottom: 8px;">Hello ${user.name},</h2>
-            <p style="margin: 0 0 16px;">We received a request to reset your ShopOnCampus password. Click the link below to proceed:</p>
-            <a
-              href="${resetUrl}"
-              style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600;"
-            >
-              Reset Password
-            </a>
-            <p style="margin: 16px 0 0; font-size: 14px; color: #6b7280;">This link expires in 1 hour.</p>
-            <p style="margin: 12px 0 0; font-size: 13px; color: #6b7280;">If the button doesn't work, use this backup link:</p>
-            <p style="margin: 4px 0 0; font-size: 13px;"><a href="${resetUrl}">Open password reset link</a></p>
-            <p style="margin: 16px 0 0; font-size: 12px; color: #9ca3af;">If you didn't request a password reset, please ignore this email.</p>
-          </div>
-        `,
+        html: buildPasswordResetEmailHtml(user.name, resetUrl),
       });
-      console.log(`[SUCCESS] Password reset email sent to ${email.toLowerCase()}`);
+      console.log(`[SUCCESS] Password reset email sent to ${normalizedEmail} via ${emailProvider}`);
     } catch (emailErr) {
-      console.error(`[ERROR] Failed to send password reset email to ${email.toLowerCase()}:`, emailErr.message);
+      console.error(`[ERROR] Failed to send password reset email to ${normalizedEmail}:`, emailErr.message);
       user.resetToken = null;
       user.resetTokenExpiry = null;
       await user.save();
@@ -492,39 +529,49 @@ router.post("/forgot-password", async (req, res) => {
 router.post("/reset-password", async (req, res) => {
   try {
     const { token, password } = req.body;
+    const resetToken = String(token || "").trim();
+    const rawPassword = String(password || "");
 
-    if (!token || !password) {
+    if (!resetToken || !rawPassword) {
       return res.status(400).json({ error: "Token and password are required" });
     }
 
-    if (!validatePassword(password)) {
+    if (!validatePassword(rawPassword)) {
       return res.status(400).json({
         error: "Password must use standard characters and be 8-128 chars.",
       });
     }
 
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (jwtErr) {
+    if (containsEmoji(rawPassword)) {
       return res.status(400).json({
-        error: "Invalid or expired password reset link",
+        error: "Emojis are not allowed in password.",
       });
     }
 
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+    const resetTokenHash = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
 
-    if (user.resetToken !== token || !user.resetTokenExpiry || new Date() > user.resetTokenExpiry) {
+    const user = await User.findOne({
+      resetToken: resetTokenHash,
+      resetTokenExpiry: { $gt: new Date() },
+    });
+
+    if (!user) {
       return res.status(400).json({
         error: "Password reset link has expired. Please request a new one.",
       });
     }
 
-    // Hash new password
-    const hashed = await bcrypt.hash(password, 12);
+    const isSamePassword = await bcrypt.compare(rawPassword, user.password);
+    if (isSamePassword) {
+      return res.status(400).json({
+        error: "New password must be different from your current password.",
+      });
+    }
+
+    const hashed = await bcrypt.hash(rawPassword, 12);
     user.password = hashed;
     user.resetToken = null;
     user.resetTokenExpiry = null;

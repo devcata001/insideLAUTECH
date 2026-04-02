@@ -2,174 +2,76 @@
 
 ## Overview
 
-ShopOnCampus supports two email delivery methods:
+ShopOnCampus uses **Nodemailer SMTP only**:
 
-1. **SMTP** - For development (localhost)
-2. **OAuth2** - For production on Render (SMTP ports blocked)
+1. **Sender email:** `shoponcampus@gmail.com`
+2. **Transport:** SMTP with Gmail App Password
+3. **Deployment:** Works on Render using environment variables
 
 ---
 
-## ✅ Method 1: Gmail SMTP (Recommended for Development)
+## Why this setup
 
-### Setup Steps:
+- ✅ Free for startup usage
+- ✅ SMTP mode is simplest and most reliable on Render
+- ✅ Works on Render
+- ✅ Keeps sender identity on `shoponcampus@gmail.com`
 
-#### Step 1: Enable 2-Factor Authentication
+---
 
-1. Go to [Google Account Settings](https://myaccount.google.com/security)
-2. Enable "2-Step Verification"
+## Setup Steps
 
-#### Step 2: Generate App Password
+### Nodemailer SMTP on Render
 
-1. Go to [App Passwords](https://myaccount.google.com/apppasswords)
-2. Select "Mail" and "Windows Computer" (or your device)
-3. Google will generate a 16-character password
-4. Copy the password (format: `xxxx xxxx xxxx xxxx`)
+Use Gmail with a 16-character App Password.
 
-#### Step 3: Update .env
+1. Enable 2-Step Verification on the Gmail account (`shoponcampus@gmail.com`)
+2. Generate an App Password in Google Account settings
+3. Set these Render environment variables:
 
 ```env
-EMAIL_USER=your-email@gmail.com
-EMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx
+EMAIL_SERVICE=smtp
+EMAIL_USER=shoponcampus@gmail.com
+EMAIL_PASS=your_16_char_app_password
+EMAIL_PROVIDER=gmail
 ```
 
-#### Step 4: Test
-
-```bash
-npm start
-# Should see: "[SUCCESS] Email service is ready and operational (SMTP)"
-```
-
----
-
-## 🚀 Method 2: Gmail OAuth2 (For Render Deployment)
-
-### Why OAuth2?
-
-- Render blocks SMTP (ports 587/465) on free tier
-- OAuth2 uses standard HTTP ports (no blocking)
-- More secure than app passwords
-
-### Setup Steps:
-
-#### Step 1: Create Google Cloud Project
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project: "ShopOnCampus"
-3. Enable Gmail API:
-   - Search "Gmail API"
-   - Click "Enable"
-
-#### Step 2: Create OAuth2 Credentials
-
-1. Go to "Credentials" in left sidebar
-2. Click "Create Credentials" → "OAuth 2.0 Client ID"
-3. Choose "Desktop application"
-4. Download the JSON file
-5. Save credentials:
-   - `GOOGLE_CLIENT_ID` = client_id from JSON
-   - `GOOGLE_CLIENT_SECRET` = client_secret from JSON
-
-#### Step 3: Generate Refresh Token
-
-Use this Node.js script:
-
-```javascript
-const { google } = require("googleapis");
-const readline = require("readline");
-
-const oauth2Client = new google.auth.OAuth2(
-  "YOUR_CLIENT_ID",
-  "YOUR_CLIENT_SECRET",
-  "http://localhost:3000", // Redirect URI
-);
-
-const scopes = ["https://www.googleapis.com/auth/gmail.send"];
-const url = oauth2Client.generateAuthUrl({
-  access_type: "offline",
-  scope: scopes,
-});
-
-console.log("Visit this URL:", url);
-// After authorizing, you'll get a code, then:
-// oauth2Client.getToken(code, (err, token) => { console.log(token); });
-```
-
-#### Step 4: Update .env on Render
-
-In Render dashboard → Environment:
+Optional custom SMTP host/port values (only if not using Gmail preset):
 
 ```env
-EMAIL_USER=your-email@gmail.com
-GOOGLE_CLIENT_ID=your_client_id
-GOOGLE_CLIENT_SECRET=your_client_secret
-GOOGLE_REFRESH_TOKEN=your_refresh_token
-GOOGLE_ACCESS_TOKEN=your_access_token (optional, auto-generated)
-```
-
-#### Step 5: Test
-
-```bash
-# Backend logs should show:
-# "[SUCCESS] Email service ready via OAuth2 (Render compatible)"
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
 ```
 
 ---
 
-## 🔄 Automatic Fallback
+## What should work
 
-The code automatically:
-
-1. ✅ Tries SMTP first (for localhost)
-2. 🔄 Falls back to OAuth2 if SMTP fails (for Render)
-3. 📊 Logs which method is being used
-
----
-
-## 🐛 Troubleshooting
-
-### "SMTP service verification failed"
-
-- **On Render**: This is normal! OAuth2 fallback activates automatically
-- **On Localhost**: Check EMAIL_USER and EMAIL_APP_PASSWORD
-
-### "OAuth2 Email service also failed"
-
-- Check Google credentials in .env
-- Verify refresh token is still valid
-- Regenerate if necessary
-
-### "Running on Render but OAuth2 credentials missing"
-
-- Add Google OAuth2 variables to Render Environment
-- Restart the service
+- ✅ Signup verification emails
+- ✅ Resend verification emails
+- ✅ Forgot password emails
+- ✅ Password reset completion flow
 
 ---
 
-## ✨ Features Working with Both Methods
+## Troubleshooting
 
-- ✅ Email verification on signup
-- ✅ Resend verification email
-- ✅ Forgot password reset
-- ✅ Password reset email
-- ✅ All emails include links that expire in 24h
+### Render: SMTP mode not sending
 
----
+- Confirm `EMAIL_SERVICE=smtp`
+- Confirm `EMAIL_USER` and `EMAIL_PASS` are both set on Render
+- For Gmail App Password, do **not** use your normal Gmail login password
+- Redeploy after updating environment variables
 
-## 📝 Summary Table
+### Port 5000 already in use
 
-| Feature         | SMTP (Dev)           | OAuth2 (Render) |
-| --------------- | -------------------- | --------------- |
-| Setup Time      | 5 min                | 20-30 min       |
-| Cost            | Free                 | Free            |
-| Security        | Good                 | Excellent       |
-| Works on Render | ❌ No (port blocked) | ✅ Yes          |
-| Works Locally   | ✅ Yes               | ✅ Yes          |
-| Auto-Fallback   | N/A                  | ✅ Yes          |
+- Stop previous process before restart:
+  - `pkill -f "node server.js"`
 
 ---
 
-## 🎯 Recommended Setup
+## Notes on free usage
 
-1. **Development**: Use SMTP (App Passwords)
-2. **Production (Render)**: Use OAuth2
-3. Both can coexist - code auto-detects which to use
+- SMTP with Gmail App Password is suitable for low/medium startup volume.
+- If volume grows heavily, move to a dedicated provider (SendGrid, Resend, Mailgun).

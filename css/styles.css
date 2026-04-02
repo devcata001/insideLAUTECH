@@ -296,14 +296,42 @@ html {
   background-color: var(--brand-accent) !important;
   color: white !important;
   border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.98rem;
+  font-weight: 700;
   line-height: 1.2;
-  padding: 0.42rem 0.95rem !important;
+  min-height: 46px;
+  min-width: 118px;
+  padding: 0.62rem 1.28rem !important;
+  border: 1px solid var(--brand-accent-strong);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);
 }
 
 .btn-signup:hover {
   background-color: var(--brand-accent-strong) !important;
+  box-shadow: 0 10px 22px rgba(29, 78, 216, 0.35);
+  transform: translateY(-1px) !important;
+}
+
+.btn-signin {
+  border: 1px solid rgba(37, 99, 235, 0.38);
+  background-color: #ffffff;
+  color: var(--brand-accent) !important;
+  border-radius: 999px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.2;
+  min-height: 46px;
+  min-width: 118px;
+  padding: 0.62rem 1.28rem !important;
+  margin-right: 0.6rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.14);
+}
+
+.btn-signin:hover {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+  border-color: rgba(37, 99, 235, 0.52);
+  color: var(--brand-accent-strong) !important;
+  box-shadow: 0 7px 16px rgba(37, 99, 235, 0.2);
   transform: translateY(-1px) !important;
 }
 
@@ -324,6 +352,14 @@ html {
   .btn-signup {
     margin-top: 0.5rem;
     display: inline-block;
+    min-width: 132px;
+  }
+
+  .btn-signin {
+    margin-top: 0.5rem;
+    margin-right: 0;
+    display: inline-block;
+    min-width: 132px;
   }
 }
 
