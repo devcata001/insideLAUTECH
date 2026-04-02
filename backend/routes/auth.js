@@ -91,6 +91,12 @@ const frontendUrl = isHostedEnvironment
   process.env.FRONTEND_URL ||
   "http://localhost:3000";
 const isProduction = process.env.NODE_ENV === "production";
+const authCookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+  maxAge: 2 * 60 * 60 * 1000,
+};
 
 const getSenderEmail = () => {
   return process.env.EMAIL_USER || "shoponcampus@gmail.com";
@@ -345,10 +351,7 @@ router.post("/login", async (req, res) => {
     );
 
     res.cookie("shoponcampus_auth", token, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: "lax",
-      maxAge: 2 * 60 * 60 * 1000,
+      ...authCookieOptions,
     });
 
     res.json({
@@ -363,9 +366,8 @@ router.post("/login", async (req, res) => {
 
 router.post("/logout", (req, res) => {
   res.clearCookie("shoponcampus_auth", {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: "lax",
+    ...authCookieOptions,
+    maxAge: undefined,
   });
 
   return res.json({ message: "Logout successful" });
