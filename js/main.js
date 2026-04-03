@@ -41,8 +41,13 @@ const sanitizeCartItems = (items) => {
     .filter(Boolean);
 };
 
+const hasAuthToken = () => {
+  return Boolean(localStorage.getItem("shoponcampus_auth_token"));
+};
+
 const canUseCartApi = () => {
   return (
+    hasAuthToken() &&
     typeof makeApiRequest === "function" &&
     Boolean(window.API_CONFIG?.endpoints?.cart?.get) &&
     Boolean(window.API_CONFIG?.endpoints?.cart?.upsert)
@@ -92,6 +97,11 @@ const syncCartFromBackend = async () => {
     updateCartCount();
   } catch (err) {
     console.error("Cart sync fetch failed, using local cart:", err);
+
+    const authError = err?.status === 401 || err?.status === 403;
+    if (authError) {
+      localStorage.removeItem("shoponcampus_auth_token");
+    }
   }
 
   return cart;
@@ -729,6 +739,10 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
 
   syncCartFromBackend().catch(() => null);
+
+  window.addEventListener("focus", () => {
+    syncCartFromBackend().catch(() => null);
+  });
 });
 
 window.showToast = showToast;

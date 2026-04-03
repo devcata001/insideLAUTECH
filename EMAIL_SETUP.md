@@ -1,77 +1,85 @@
-# Email Service Setup Guide
+# Email Setup (Render + Nodemailer)
 
-## Overview
+Yes — Nodemailer works on Render.
 
-ShopOnCampus uses **Nodemailer SMTP only**:
+Render does **not** block Nodemailer itself. The requirement is that you use a valid SMTP provider and correct credentials.
 
-1. **Sender email:** `shoponcampus@gmail.com`
-2. **Transport:** SMTP with Gmail App Password
-3. **Deployment:** Works on Render using environment variables
+## Key Point About `noreply@...`
 
----
+You can use `noreply@yourdomain.com` **as the sender** if:
 
-## Why this setup
+1. Your SMTP provider allows that sender/domain
+2. The domain is verified (SPF/DKIM configured)
+3. The mailbox/sender identity exists with the provider
 
-- ✅ Free for startup usage
-- ✅ SMTP mode is simplest and most reliable on Render
-- ✅ Works on Render
-- ✅ Keeps sender identity on `shoponcampus@gmail.com`
+If these are missing, many providers reject mail or mark it as spam.
 
----
+## If You Don't Have a Domain
 
-## Setup Steps
+You can still send email immediately.
 
-### Nodemailer SMTP on Render
+- Use a real mailbox you own (for example, Gmail SMTP with App Password)
+- Set `EMAIL_USER` to that mailbox
+- Leave `EMAIL_FROM` empty **or** set it to the same mailbox address
 
-Use Gmail with a 16-character App Password.
-
-1. Enable 2-Step Verification on the Gmail account (`shoponcampus@gmail.com`)
-2. Generate an App Password in Google Account settings
-3. Set these Render environment variables:
+Example:
 
 ```env
 EMAIL_SERVICE=smtp
-EMAIL_USER=shoponcampus@gmail.com
+EMAIL_USER=yourname@gmail.com
 EMAIL_PASS=your_16_char_app_password
+# EMAIL_FROM=yourname@gmail.com
 EMAIL_PROVIDER=gmail
 ```
 
-Optional custom SMTP host/port values (only if not using Gmail preset):
+In short: without a domain, do **not** use `noreply@something.com`.
+
+## Environment Variables
+
+Set these in Render (Service → Environment):
 
 ```env
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_SECURE=false
+EMAIL_SERVICE=smtp
+EMAIL_USER=your_smtp_username
+EMAIL_PASS=your_smtp_password
+
+# Optional explicit sender shown in "From"
+EMAIL_FROM=noreply@yourdomain.com
+
+# Option A: provider shortcut (e.g. gmail)
+EMAIL_PROVIDER=gmail
+
+# Option B: explicit SMTP host (recommended for custom providers)
+# EMAIL_HOST=smtp.your-provider.com
+# EMAIL_PORT=587
+# EMAIL_SECURE=false
 ```
 
----
+Backend behavior:
 
-## What should work
+- SMTP auth uses `EMAIL_USER` + `EMAIL_PASS`
+- From address uses `EMAIL_FROM` if set, otherwise `EMAIL_USER`
 
-- ✅ Signup verification emails
-- ✅ Resend verification emails
-- ✅ Forgot password emails
-- ✅ Password reset completion flow
+## Working Provider Examples
 
----
+- Gmail SMTP (with App Password)
+- Mailgun SMTP
+- SendGrid SMTP
+- Resend SMTP endpoint
+- Zoho SMTP
 
-## Troubleshooting
+## Quick Troubleshooting
 
-### Render: SMTP mode not sending
+1. Check Render logs for `Email service ready via SMTP`
+2. If you see auth failures, re-check username/password or app password
+3. If send succeeds but inbox misses mail, fix SPF/DKIM/DMARC for your domain
+4. If using `noreply@...`, make sure that identity is allowed by your SMTP provider
 
-- Confirm `EMAIL_SERVICE=smtp`
-- Confirm `EMAIL_USER` and `EMAIL_PASS` are both set on Render
-- For Gmail App Password, do **not** use your normal Gmail login password
-- Redeploy after updating environment variables
+## Local vs Render
 
-### Port 5000 already in use
+Same code path. The difference is only environment variables.
 
-- Stop previous process before restart:
-  - `pkill -f "node server.js"`
+- Local: values in `backend/.env`
+- Render: values in dashboard Environment settings
 
----
-
-## Notes on free usage
-
-- SMTP with Gmail App Password is suitable for low/medium startup volume.
-- If volume grows heavily, move to a dedicated provider (SendGrid, Resend, Mailgun).
+If local works and Render fails, it is usually a missing/incorrect env var in Render.

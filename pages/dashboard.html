@@ -283,6 +283,14 @@
 
     let dashboardOrders = [];
 
+    const hasAuthToken = () =>
+      Boolean(localStorage.getItem("shoponcampus_auth_token"));
+
+    const canUseOrdersApi = () =>
+      typeof makeApiRequest === "function" &&
+      Boolean(window.API_CONFIG?.endpoints?.orders?.list) &&
+      hasAuthToken();
+
     const mapApiOrder = (order) => {
       const items = Array.isArray(order.products)
         ? order.products.map((item) => ({
@@ -309,7 +317,7 @@
     };
 
     const fetchUserOrders = async () => {
-      if (typeof makeApiRequest === "function" && window.API_CONFIG?.endpoints?.orders?.list) {
+      if (canUseOrdersApi()) {
         try {
           const apiOrders = await makeApiRequest(API_CONFIG.endpoints.orders.list, {
             method: "GET",
@@ -322,7 +330,9 @@
           );
           return dashboardOrders;
         } catch (err) {
-          console.error("Failed to fetch orders from API, using local fallback:", err);
+          console.error("Failed to fetch orders from API:", err);
+          dashboardOrders = [];
+          return dashboardOrders;
         }
       }
 
@@ -345,6 +355,27 @@
     };
 
     updateTotalOrders();
+
+    const refreshDashboardOrders = async () => {
+      await updateTotalOrders();
+
+      const ordersSection = document.getElementById("ordersSection");
+      if (ordersSection && ordersSection.style.display !== "none") {
+        await loadUserOrders();
+      }
+    };
+
+    window.addEventListener("focus", () => {
+      refreshDashboardOrders().catch(() => null);
+    });
+
+    const dashboardRefreshInterval = setInterval(() => {
+      refreshDashboardOrders().catch(() => null);
+    }, 30000);
+
+    window.addEventListener("beforeunload", () => {
+      clearInterval(dashboardRefreshInterval);
+    });
 
     const loadUserOrders = async () => {
       const userOrders = await fetchUserOrders();

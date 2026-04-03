@@ -79,6 +79,7 @@ const logEmailSetupError = () => {
   console.error("  EMAIL_SERVICE=smtp");
   console.error("  EMAIL_USER=shoponcampus@gmail.com");
   console.error("  EMAIL_PASS=your_gmail_app_password");
+  console.error("  EMAIL_FROM=noreply@yourdomain.com (optional sender address)");
   console.error("  EMAIL_PROVIDER=gmail (optional)\n");
   console.error("See EMAIL_SETUP.md for detailed instructions.\n");
 };
@@ -99,7 +100,7 @@ const authCookieOptions = {
 };
 
 const getSenderEmail = () => {
-  return process.env.EMAIL_USER || "shoponcampus@gmail.com";
+  return process.env.EMAIL_FROM || process.env.EMAIL_USER || "shoponcampus@gmail.com";
 };
 
 const sendEmail = async ({ to, subject, html }) => {
