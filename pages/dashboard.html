@@ -251,12 +251,6 @@
   <script src="../js/api-config.js"></script>
   <script src="../js/main.js"></script>
   <script>
-    const user = checkSession();
-    if (!user) {
-      showToast("Please login to access dashboard", "warning");
-      window.location.href = "login.html";
-    }
-
     const dashboardLogoutLink = document.getElementById(
       "dashboardLogoutLink",
     );
@@ -267,19 +261,56 @@
       });
     }
 
-    document.getElementById("userName").textContent = user.name;
-    document.getElementById("userEmail").textContent = user.email;
-    document.getElementById("profileName").value = user.name;
-    document.getElementById("profileEmail").value = user.email;
-    document.getElementById("profilePhone").value =
-      user.phone || "Not provided";
+    const fallbackUser = checkSession();
+    let currentUser = fallbackUser;
 
-    const memberSinceDate = user.createdAt
-      ? new Date(user.createdAt)
-      : new Date();
-    document.getElementById("memberSince").innerHTML = `
+    const renderUserProfile = (user) => {
+      if (!user) {
+        showToast("Please login to access dashboard", "warning");
+        window.location.href = "login.html";
+        return false;
+      }
+
+      document.getElementById("userName").textContent = user.name || "User";
+      document.getElementById("userEmail").textContent = user.email || "";
+      document.getElementById("profileName").value = user.name || "";
+      document.getElementById("profileEmail").value = user.email || "";
+      document.getElementById("profilePhone").value =
+        user.phone || "Not provided";
+
+      const memberSinceDate = user.createdAt
+        ? new Date(user.createdAt)
+        : new Date();
+      document.getElementById("memberSince").innerHTML = `
             <i class="bi bi-info-circle"></i> Member since ${memberSinceDate.toLocaleDateString()}
         `;
+
+      return true;
+    };
+
+    const loadDashboardUser = async () => {
+      let user = fallbackUser;
+
+      if (typeof makeApiRequest === "function" && window.API_CONFIG?.endpoints?.auth?.me) {
+        try {
+          user = await makeApiRequest(API_CONFIG.endpoints.auth.me, {
+            method: "GET",
+            includeAuth: true,
+          });
+        } catch (err) {
+          console.error("Failed to load dashboard profile from API:", err);
+        }
+      }
+
+      const ok = renderUserProfile(user);
+      if (!ok) {
+        return null;
+      }
+
+      currentUser = user;
+
+      return user;
+    };
 
     let dashboardOrders = [];
 
@@ -305,8 +336,8 @@
 
       return {
         orderId: order._id || `ORD-${Date.now()}`,
-        userId: user.email,
-        userName: user.name,
+        userId: currentUser?.email || "",
+        userName: currentUser?.name || "User",
         items,
         total: Number(order.total) || 0,
         paymentRef: order.paymentRef || "",
@@ -338,7 +369,7 @@
 
       const allOrders = JSON.parse(localStorage.getItem("shoponcampus_orders") || "[]");
       dashboardOrders = allOrders
-        .filter((order) => order.userId === user.email)
+        .filter((order) => order.userId === currentUser?.email)
         .sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -354,7 +385,16 @@
       }
     };
 
-    updateTotalOrders();
+    const initializeDashboard = async () => {
+      const user = await loadDashboardUser();
+      if (!user) {
+        return;
+      }
+
+      await updateTotalOrders();
+    };
+
+    initializeDashboard();
 
     const refreshDashboardOrders = async () => {
       await updateTotalOrders();
